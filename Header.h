@@ -22,28 +22,89 @@
 
 using namespace std;
 
-/*class User
+class User
 {
 private:
     string login;
     string password;
     bool isAdmin;
 public:
-    void getLogin(){
-        return login;
+     User(const std::string& login, const std::string& password, bool isAdmin)
+         : login(login), password(password), isAdmin(isAdmin) {}
+
+     // Методы доступа к полям класса
+     const std::string& getLogin() const {
+         return login;
+     }
+
+     const std::string& getPassword() const {
+         return password;
+     }
+
+     bool getIsAdmin() const {
+         return isAdmin;
+     }
+};
+
+class Jewelry
+{
+private: 
+    int price;
+    int amount;
+    string productType;
+    string metall;
+    int metallSample;
+    string collection;
+public:
+    Jewelry(int price, int amount, const string& productType, const string& metall, int metallSample, const string& collection )
+        : price(price), amount(amount), productType(productType), metall(metall), metallSample(metallSample), collection(collection)  {}
+
+    // Методы доступа к полям класса
+    const string& getProductType() const {
+        return productType;
     }
-    void getPassword(){
-        return password;
+
+    const string& getMetall() const {
+        return metall;
     }
-    void getIsAdmin(){
-        return isAdmin;
+
+    int getPrice() const {
+        return price;
     }
-}*/
-struct User {
+    
+    int getAmount() const {
+        return amount;
+    }
+    
+    int getMetallSample() const {
+        return metallSample;
+    }
+    
+    const string& getCollection() const {
+        return collection;
+    }
+    
+};
+/*struct User {
     string login;
     string password;
     bool isAdmin;
-};
+};*/
+
+class Jewelry
+{
+private: 
+    int price;
+    int amount;
+    string productType;
+    string metall;
+    int metallSample;
+    string collection;
+public:
+
+    
+
+}
 
 struct Jewelry{
     int price;
