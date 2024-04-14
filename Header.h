@@ -22,6 +22,23 @@
 
 using namespace std;
 
+/*class User
+{
+private:
+    string login;
+    string password;
+    bool isAdmin;
+public:
+    void getLogin(){
+        return login;
+    }
+    void getPassword(){
+        return password;
+    }
+    void getIsAdmin(){
+        return isAdmin;
+    }
+}*/
 struct User {
     string login;
     string password;
