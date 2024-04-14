@@ -11,8 +11,7 @@
 
 std::string global_login;
 
-string checkSize(string s)
-{//проверка на размер строки
+string checkSize(string s){//проверка на размер строки
     const int SIZE = 8;
     do
     {
@@ -49,6 +48,7 @@ string checkString(string s)//проверка на ввод строки
 
     }
 }
+
 bool isNumberNumeric()//проверка на ввод числа
 {
     if (cin.get() == '\n')
@@ -108,6 +108,7 @@ void start_menu() {//начальное меню
 
     }
 }
+
 void writeUsersToFile(const vector<User>& users) {//запись пользователей в файл
     string filename = "users.txt";
     std::ofstream outputFile(filename);
@@ -179,7 +180,7 @@ vector<User> readUsersFromFile() {//достать пользователей и
     return users;
 }
 
-vector<Medical> readMedicalFromFile() {//достать записи из файла в вектор
+/*vector<Medical> readMedicalFromFile() {//достать записи из файла в вектор
     string fileName = "medicals.txt";
     vector<Medical> medicals;
     ifstream inputFile(fileName);
@@ -204,7 +205,35 @@ vector<Medical> readMedicalFromFile() {//достать записи из фай
 
     }
     return medicals;
+}*/
+
+vector<Jewelry> readJewelryFromFile() {//достать записи из файла в вектор
+    string fileName = "jewelry.txt";
+    vector<Jewelry> jewelryProducts;
+    ifstream inputFile(fileName);
+    if (inputFile.is_open()) {
+        //Medical medical;
+        string surname, name, patronymic;
+        int day, month, year;
+        double day_salary, quantity_miss_day,pay_day,result_pay;
+        while (inputFile >> surname >> name >> patronymic
+            >> day >>month >> year
+            >> day_salary >> quantity_miss_day >> pay_day >> result_pay)
+        {
+            // добавляем структуру в вектор
+            jewelryProducts.push_back(Jewelry{ FIO{surname,name,patronymic},Date{day,month,year},day_salary, quantity_miss_day,pay_day,result_pay });
+        }
+
+        inputFile.close();
+    }
+    else {
+        cerr << "Ошибка открытия файла " << fileName << endl;
+        return medicals;
+
+    }
+    return medicals;
 }
+
 void writeAccountsToFile(const vector<User>& accounts) {//Запись аккаунтов в файл
     string filename = "accounts.txt";
     std::ofstream outputFile(filename);
