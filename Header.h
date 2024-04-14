@@ -29,6 +29,8 @@ private:
     string password;
     bool isAdmin;
 public:
+     User(){}
+    
      User(const std::string& login, const std::string& password, bool isAdmin)
          : login(login), password(password), isAdmin(isAdmin) {}
 
@@ -44,6 +46,18 @@ public:
      bool getIsAdmin() const {
          return isAdmin;
      }
+    
+     void setLogin(const string& newLogin) {
+        login = newLogin;
+     }
+     
+     void setPassword(const string& newPassword) {
+        password = newPassword;
+     }
+    
+     void setIsAdmin(bool newIsAdmin){
+        isAdmin = newIsAdmin;
+     }
 };
 
 class Jewelry
@@ -56,6 +70,9 @@ private:
     int metallSample;
     string collection;
 public:
+    
+    Jewelry(){}
+    
     Jewelry(int price, int amount, const string& productType, const string& metall, int metallSample, const string& collection )
         : price(price), amount(amount), productType(productType), metall(metall), metallSample(metallSample), collection(collection)  {}
 
@@ -84,36 +101,45 @@ public:
         return collection;
     }
     
+    void setProductType(const string& newProductType) {
+        productType = newProductType;
+    }
+    
+    void setMetall(const string& newMetall) {
+        productType = newMetall;
+    }
+    
+    void setPrice(int newPrice) {
+        price = newPrice;
+    }
+    
+    void setAmount(int newAmount) {
+        amount = newAmount;
+    }
+    
+    void setMetallSample(int newMetallSample) {
+        metallSample = newMetallSample;
+    }
+    
+    void setCollection (const string& newCollection){
+        collection = newCollection;
+    }
+    
 };
 /*struct User {
     string login;
     string password;
     bool isAdmin;
+}*/
+
+/*struct Jewelry{
+    int price;
+    int amount;
+    string productType;
+    string metall;
+    int metallSample;
+    string collection;
 };*/
-
-class Jewelry
-{
-private: 
-    int price;
-    int amount;
-    string productType;
-    string metall;
-    int metallSample;
-    string collection;
-public:
-
-    
-
-}
-
-struct Jewelry{
-    int price;
-    int amount;
-    string productType;
-    string metall;
-    int metallSample;
-    string collection;
-};
 
 /*struct FIO {
     string surname;
@@ -168,9 +194,9 @@ extern void printJewelryTable(const std::vector<Jewelry>& jewelryProducts);//о�
 
 
 /*extern bool isSortBySurname(Medical name_a, Medical name_b);//заменяем на
-extern bool isSortByMonth(Medical month_a, Medical month_b);/ 
-extern bool isSortByYear(Medical year_a, Medical year_b); 
-extern bool isSortByDay(Medical day_a, Medical day_b); 
+extern bool isSortByMonth(Medical month_a, Medical month_b);/
+extern bool isSortByYear(Medical year_a, Medical year_b);
+extern bool isSortByDay(Medical day_a, Medical day_b);
 extern bool isSortBySalary(Medical salary_a, Medical salary_b); */
 extern bool isSortByPrice(Jewelry price_a, Jewelry price_b);//сортировка по цене
 extern bool isSortByAmount(Jewelry amount_a, Jewelry amounth_b);//сортировка по количеству в наличии
@@ -188,7 +214,7 @@ extern void approve(); //одобрение заявки
 /*extern void addMedical();//заменяем на*/
 extern void addJewelry();//добавление товара
 
-extern void addaccount(); 
+extern void addaccount();
 
 /*extern void deleteMedical();//заменяем на*/
 extern void deleteJewelry();//удаление товара
@@ -204,9 +230,9 @@ extern void individualTask();//индивидуальное задание (оф
 
 /*extern void searchSurname();//заменяем на
 extern void searchMonth();
-extern void searchYear(); 
-extern void searchQuantity(); 
-extern void searchDaySalary(); 
+extern void searchYear();
+extern void searchQuantity();
+extern void searchDaySalary();
 extern void searchMedical();*/
 extern void searchPrice();//поиск по цене
 extern void searchAmount(); //поиск по количеству
