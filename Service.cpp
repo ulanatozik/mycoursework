@@ -213,25 +213,24 @@ vector<Jewelry> readJewelryFromFile() {//достать записи из фай
     ifstream inputFile(fileName);
     if (inputFile.is_open()) {
         //Medical medical;
-        string surname, name, patronymic;
-        int day, month, year;
-        double day_salary, quantity_miss_day,pay_day,result_pay;
-        while (inputFile >> surname >> name >> patronymic
-            >> day >>month >> year
-            >> day_salary >> quantity_miss_day >> pay_day >> result_pay)
+        int price, amount, metallSample;
+         
+        string productType, metall, collection;
+        while (inputFile >> price >> amount >> metallSample
+            >> productType >> metall >> collection)
         {
             // добавляем структуру в вектор
-            jewelryProducts.push_back(Jewelry{ FIO{surname,name,patronymic},Date{day,month,year},day_salary, quantity_miss_day,pay_day,result_pay });
+            jewelryProducts.push_back(Jewelry{price, amount, metallSample, productType, metall, collection});
         }
 
         inputFile.close();
     }
     else {
         cerr << "Ошибка открытия файла " << fileName << endl;
-        return medicals;
+        return jewelryProducts;
 
     }
-    return medicals;
+    return jewelryProducts;
 }
 
 void writeAccountsToFile(const vector<User>& accounts) {//Запись аккаунтов в файл
@@ -250,7 +249,7 @@ void writeAccountsToFile(const vector<User>& accounts) {//Запись акка�
     outputFile.close();
 }
 
-void writeMedicalsToFile( std::vector<Medical>& medicals) {//запись больничных в файл
+/*void writeJewelryToFile( std::vector<Medical>& medicals) {//запись больничных в файл
     string filename = "medicals.txt";
     std::ofstream outputFile(filename);
 
@@ -277,6 +276,36 @@ void writeMedicalsToFile( std::vector<Medical>& medicals) {//запись бол
 
 
     outputFile.close();
+}*/
+
+ 
+
+void writeJewelryToFile( std::vector<Jewelry>& jewelryProducts) {//запись больничных в файл
+    string filename = "jewelry.txt";
+    std::ofstream outputFile(filename);
+
+    if (!outputFile.is_open()) {
+        std::cerr << "Ошибка открытия файла " << filename << " для записи." << std::endl;
+        return;
+    }
+
+    for ( Jewelry& jewelry : jewelryProducts) {
+        outputFile << jewelry.price << " " << jewelry.amount << " " << jewelry.metallSample << " " << jewelry.productType << " "
+            << jewelry.metall << " " << jewelry.collection << " ";
+        /*if (medical.quantity_miss_day >= 16) {
+            medical.pay_day = medical.day_salary;
+            medical.result_pay = medical.quantity_miss_day * medical.day_salary;
+            outputFile << medical.day_salary << " " << medical.day_salary * medical.quantity_miss_day << endl;
+        }
+        else {
+            medical.pay_day = medical.day_salary*0.8;
+            medical.result_pay = medical.quantity_miss_day * medical.day_salary*0.8;
+            outputFile << medical.day_salary*0.8 << " " << medical.day_salary * medical.quantity_miss_day*0.8 << endl;
+        }*/
+    }
+
+
+    outputFile.close();
 }
 
 void printUsersTable(const std::vector<User>& users)
@@ -284,7 +313,7 @@ void printUsersTable(const std::vector<User>& users)
     system("cls");
     // Вывод заголовка таблицы
     cout << "---------------------------------------" << endl;
-    std::cout << "|" << setw(3) << "π" << "|" << std::setw(10) << "Логин" << " | "
+    std::cout << "|" << setw(3) << "Пользователь" << "|" << std::setw(10) << "Логин" << " | "
         << std::setw(10) << "Пароль" << " | "
         << std::setw(7) << "Админ" << "|" << std::endl;
     cout << "---------------------------------------" << endl;
@@ -297,22 +326,20 @@ void printUsersTable(const std::vector<User>& users)
         cout << "---------------------------------------" << endl;
     }
 }
-
-void printMedicalTable(std::vector<Medical>& medicals) {//вывод таблицы больничных
+ 
+void printJewelryTable(std::vector<Jewelry>& jewelryProducts) {//вывод таблицы больничных
     system("cls");
     cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
-    cout << "|" << setw(3) << "π" << "|" << std::setw(16) << "Фамилия" << " | "
-        << std::setw(10) << "Имя" << " | "
-        << std::setw(14) << "Отчество" << "|" << setw(5) << "День" << "|" << setw(5) << "Месяц" << "|" << setw(7) << "Год" << "|"
-        << setw(12) << "ƒÌÂ‚Ì‡ˇ «œ" << "|" << setw(14) << "Пропущенные дни" << "|" << setw(8) << "Оплата" << "|" << setw(5) << "Итог" << "|" << std::endl;
+    cout << "|" << std::setw(16) << "Вид изделия" << " | "
+        << std::setw(10) << "Металл" << " | "
+        << std::setw(14) << "Проба" << "|" << setw(5) << "Цена" << "|" << setw(5) << "Количество" << "|" << setw(7) << "Коллекция" << "|" << std::endl;
     cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
     int i = 0;
-    for (auto& medical : medicals) {
-        cout << "|" << setw(3) << ++i << "|" << std::setw(16) << medical.Fio.surname << " | "
-            << std::setw(10) << medical.Fio.name << " | "
-            << std::setw(14) << medical.Fio.patronymic << "|" << setw(5) << medical.Data.day << "|" << setw(5) << medical.Data.month << "|" << setw(7) << medical.Data.year << "|"
-            << setw(12) << medical.day_salary << "|" << setw(15) << medical.quantity_miss_day << "|";
-        if (medical.quantity_miss_day >= 16) {
+    for (auto& jewelry : jewelryProducts) {
+        cout << "|" << setw(3) << ++i << "|" << std::setw(16) << jewelry.productType << " | "
+            << std::setw(10) << jewelry.metall << " | "
+            << std::setw(14) << jewelry.metallSample << "|" << setw(5) << jewelry.price << "|" << setw(5) << jewelry.amount << "|" << setw(12) << jewelry.collection << "|";
+        /*if (medical.quantity_miss_day >= 16) {
             medical.pay_day = medical.day_salary;
             cout << setw(9) << medical.day_salary << "|";
             medical.result_pay = medical.pay_day * medical.quantity_miss_day;
@@ -323,18 +350,17 @@ void printMedicalTable(std::vector<Medical>& medicals) {//вывод табли�
             cout << setw(9) << medical.day_salary * 0.8 << "|";
             medical.result_pay = medical.pay_day * medical.quantity_miss_day;
             cout << setw(5) << medical.result_pay << "|" << std::endl;
-        }
+        }*/
         cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
 
     }
 }
-void headTable() {//шапка таблицы больничных
+void headTable() {//шапка таблицы товаров
     system("cls");
     cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
-    cout << "|" << setw(3) << "π" << "|" << std::setw(16) << "Фпмилия" << " | "
-        << std::setw(10) << "Имя" << " | "
-        << std::setw(14) << "Отчество" << "|" << setw(5) << "День" << "|" << setw(5) << "Месяц" << "|" << setw(7) << "Год" << "|"
-        << setw(12) << "ƒÌÂ‚Ì‡ˇ «œ" << "|" << setw(14) << "Пропущенные дни" << "|" << setw(8) << "Оплата" << "|" << setw(5) << "Итог" << "|" << std::endl;
+    cout << "|" << std::setw(16) << "Вид изделия" << " | "
+        << std::setw(10) << "Металл" << " | "
+        << std::setw(14) << "Проба" << "|" << setw(5) << "Цена" << "|" << setw(5) << "Количество" << "|" << setw(7) << "Коллекция" << "|" << std::endl;
     cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
 }
 
@@ -369,46 +395,46 @@ void approve() {//одобрение заявки
     }
     }
 }
+struct Jewelry{
+    int price;
+    int amount;
+    string productType;
+    string metall;
+    int metallSample;
+    string collection;
+};
 
-void addMedical() {//добавить больничный
+void addJewelry() {//добавить товар
     system("cls");
-    cout << "Добавить больничный лист" << endl;
-    string surname, name, patronymic;
-    int day, month, year;
-    double day_salary, quantity_miss_day;
-    vector<Medical> medicals = readMedicalFromFile();
+    cout << "Добавить товар:" << endl;
+    string productType, metall, collection;
+    int price, amount, metallSample;
+ 
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
     while (true) {
-        cout << "Введите фамилию сотрудника" << endl;
-        surname = checkString(surname);
-        cout << "Введите имя сотрудника" << endl;
-        name = checkString(name);
-        cout << "Введите отчество сотрудника" << endl;
-        patronymic = checkString(patronymic);
-        cout << "Введите дату получения больничного листа бухгалтерией" << endl;
-        cout << setw(10) << "День" << endl;
-        day = inputNumber(1, 31);
-        cout << setw(10) << "Месяц" << endl;
-        month = inputNumber(1, 12);
-        cout << setw(10) << "Год" << endl;
-        year = inputNumber(1970, 2023);
-        cout << "Введите, сколько сотрудник получает в день" << endl;
-        day_salary = inputNumber(1, 100);
-        cout << "Введите количество пропущенных дней сотрудником" << endl;
-        quantity_miss_day = inputNumber(1, 60);
+        cout << "Введите вид ювелирного изделия:" << endl;
+        productType = checkString(productType);
+        cout << "Введите вид металла:" << endl;
+        metall = checkString(metall);
+        cout << "Введите пробу металла:" << endl;
+        metallSample = inputNumber(375, 950);
+        cout << "Введите цену за 1 единицу товара:" << endl;
+        price = inputNumber(1, 10000);
+        cout << "Введите количество данного товара в наличии:" << endl;
+        amount = inputNumber(1, 100);
+        cout << "Введите коллекцию, к которой принадлежит товар:" << endl;
+        collection = checkString(collection);
         break;
     }
-    Medical medical;
-    medical.Fio.surname = surname;
-    medical.Fio.name = name;
-    medical.Fio.patronymic = patronymic;
-    medical.Data.day = day;
-    medical.Data.month = month;
-    medical.Data.year = year;
-    medical.day_salary = day_salary;
-    medical.quantity_miss_day = quantity_miss_day;
-    medicals.push_back(medical);
-    writeMedicalsToFile(medicals);
-    printMedicalTable(medicals);
+    Jewelry jewelry;
+    jewelry.productType = productType;
+    jewelry.metall = metall;
+    jewelry.metallSample = metallSamplec;
+    jewelry.price = price;
+    jewelry.amount = amount;
+    jewelry.collection = collection;
+    writeJewelryToFile(jewelryProducts);
+    printJewelryTable(jewelryProducts);
 }
 
 void addaccount() {//Добавить аккаунт
@@ -438,23 +464,23 @@ void addaccount() {//Добавить аккаунт
     writeUsersToFile(users);
 }
 
-void deleteMedical() {//удалить больничный
+void deleteJewelry() {//удалить товар //???????
     system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    printMedicalTable(medicals);
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    printJewelryTable(jewelryProducts);
     int number_for_delete;
-    cout << "----Удаление больничного листа---" << endl << endl;
-    cout << "Введите номер больничного, который хотите удалить" << endl;
-    number_for_delete = inputNumber(1, medicals.size());
+    cout << "----Удаление товара---" << endl << endl;
+    cout << "Введите номер товара, который хотите удалить" << endl;
+    number_for_delete = inputNumber(1, jewelryProducts.size());
     int yes_or_no;
     cout << "1. Да" << endl
         << "2. Нет" << endl
         << "Ваш выбор?" << endl;
     yes_or_no = inputNumber(1, 2);
     if (yes_or_no == 1) {
-        medicals.erase(medicals.begin() + number_for_delete - 1);
-        cout << "----Больничный лист успешно удален----" << endl;
-        writeMedicalsToFile(medicals);
+        jewelryProducts.erase(jewelryProducts.begin() + number_for_delete - 1);
+        cout << "----Товар успешно удален----" << endl;
+        writeJewelryToFile(jewelryProducts);
     }
     else cout << "Вы отменили удаление" << endl;
 }
@@ -498,70 +524,61 @@ void deleteAccount() {//удалить аккаунт
 
 }
 
-void editMedical() {//редактирование больничных
+void editJewelry() {//редактирование товара
     while (1) {
         system("cls");
-        vector<Medical> medicals = readMedicalFromFile();
-        printMedicalTable(medicals);
-        int choice, number_for_edit;
-        string surname, name, patronymic;
-        int day, month, year;
-        double day_salary, quantity_miss_day;
-        cout << "Введите номер аккаунта, который хотите изменить " << endl;
-        number_for_edit = inputNumber(1, medicals.size());
+        vector<Jewelry> jewelryProducts = readJewelryFromFile();
+        printJewelryTable(jewelryProducts);
+        string productType, metall, collection;
+        int price, amount, metallSample;
+        cout << "Введите номер товара, который хотите изменить " << endl;
+        number_for_edit = inputNumber(1, jewelryProducts.size());
         cout << "--------------Нажмите--------------" << endl;
-        cout << "1-Чтобы изменить ФИО" << endl;
-        cout << "2-Чтобы изменить дату получения больничного бухгалтерией" << endl;
-        cout << "3-Чтобы изменить дневную оплату сотрудника" << endl;
-        cout << "4-Чтобы изменить количество пропущенных дней" << endl;
-        cout << "5-˜ÚÓ·˚ ‚˚ÈÚË ËÁ ÂÊËÏ‡ Â‰‡ÍÚËÓ‚‡ÌËˇ" << endl;
-        cout << "¬‡¯ ‚˚·Ó: ";
+        cout << "1-Чтобы изменить вид изделия" << endl;
+        cout << "2-Чтобы изменить количество товара в наличии" << endl;
+        cout << "3-Чтобы изменить коллекцию, к которой принадлежит товар" << endl;
+        cout << "4-Чтобы изменить цену товара" << endl;
+        cout << "5-Чтобы выйти из режима редактирования" << endl;
+        cout << "Ваш выбор: ";
         choice = inputNumber(1, 5);
         switch (choice) {
         case 1: {
-            cout << "--Изменение ФИО--" << endl;
-            cout << setw(5) << "Фамилия:" << endl;
-            surname = checkString(surname);
-            cout << setw(5) << "Имя: " << endl;
-            name = checkString(name);
-            cout << setw(5) << "Отчество: " << endl;
-            patronymic = checkString(patronymic);
-            medicals.at(number_for_edit - 1).Fio.surname = surname;
-            medicals.at(number_for_edit - 1).Fio.name = name;
-            medicals.at(number_for_edit - 1).Fio.patronymic = patronymic;
-            writeMedicalsToFile(medicals);
-            cout << "--Изменено--" << endl;
+            cout << "--Изменение вида изделия--" << endl;
+            cout << setw(5) << "Новый вид изделия:" << endl;
+            productType = checkString(productType);
+          
+            jewelryProducts.at(number_for_edit - 1).productType = productType;
+            writeJewelryToFile(jewelryProduct);
+            cout << "--Вид изделия изменен--" << endl;
             break;
         }
         case 2: {
-            cout << "--Изменеие даты получения--" << endl;
-            cout << setw(5) << "День: " << endl;
-            day = inputNumber(1, 31);
-            cout << setw(5) << "Месяц: " << endl;
-            month = inputNumber(1, 12);
-            cout << setw(5) << "Год: " << endl;
-            year = inputNumber(1970, 2023);
-            medicals.at(number_for_edit - 1).Data.day = day;
-            medicals.at(number_for_edit - 1).Data.month = month;
-            medicals.at(number_for_edit - 1).Data.year = year;
-            writeMedicalsToFile(medicals);
-            cout << "--Дата изменена--" << endl;
+            cout << "--Изменеие количества товара в наличии--" << endl;
+            cout << setw(5) << "Новое количество: " << endl;
+            amount = inputNumber(1, 100);
+          
+            jewelryProducts.at(number_for_edit - 1).amount = amount;
+            
+            writeJewelryToFile(jewelryProduct);
+            cout << "--Количество товара изменено--" << endl;
             break;
         }
         case 3: {
-            cout << "--Изменение дневной оплаты˚--" << endl;
-            day_salary = inputNumber(1, 100);
-            medicals.at(number_for_edit - 1).day_salary = day_salary;
-            writeMedicalsToFile(medicals);
-            cout << "--Дневная оплата изменена--" << endl;
+            cout << "--Изменение коллекции--" << endl;
+            cout << setw(5) << "Новая коллекция:" << endl;
+            collection = checkString(collection);
+          
+            jewelryProducts.at(number_for_edit - 1).collection = collection;
+            writeJewelryToFile(jewelryProduct);
+            cout << "--Коллекция изменен--" << endl;
             break;
         }
         case 4: {
-            cout << "--Изменение количества пропущенных дней--" << endl;
-            quantity_miss_day = inputNumber(1, 60);
-            medicals.at(number_for_edit - 1).quantity_miss_day = quantity_miss_day;
-            writeMedicalsToFile(medicals);
-            cout << "-- Количество пропущенных дней изменено--" << endl;
+            cout << "--Изменение цены товара--" << endl;
+            price = inputNumber(1, 10000);
+            jewelryProducts.at(number_for_edit - 1).price = price;
+            writeJewelryToFile(jewelryProduct);
+            cout << "--Цена товара изменена--" << endl;
             break;
         }
         case 5: {
@@ -572,6 +589,7 @@ void editMedical() {//редактирование больничных
 
     }
 }
+
 void editAccount() {//редактирование аккаунтов
     while (1) {
         system("cls");
@@ -581,16 +599,16 @@ void editAccount() {//редактирование аккаунтов
         string login;
         cout << "Введите номер аккаунта, который хотите изменить: " << endl;
         number_for_edit = inputNumber(1, users.size());
-        cout << "--------------¬¬≈ƒ»“≈--------------" << endl;
-        cout << "1-чтобы изменить логин" << endl;
-        cout << "2-чтобы изменить пароль¸" << endl;
-        cout << "3-чтобы редактировать все данные аккаунта" << endl;
-        cout << "4-чтобы выйти из режима редактирования" << endl;
+        cout << "--------------Введите--------------" << endl;
+        cout << "1 - Чтобы изменить логин" << endl;
+        cout << "2 - Чтобы изменить пароль¸" << endl;
+        cout << "3 - Чтобы редактировать все данные аккаунта" << endl;
+        cout << "4 - Чтобы выйти из режима редактирования" << endl;
         cout << "Ваш выбор: ";
         choice = inputNumber(1, 4);
         switch (choice) {
         case 1: {
-            cout << "--ÕÓ‚˚È ÎÓ„ËÌ--" << endl;
+            cout << "--Новый логин--" << endl;
             cin >> login;
             while (i < users.size()) {
                 if (users.at(i).login == login) {
@@ -661,6 +679,7 @@ void editAccount() {//редактирование аккаунтов
 
     }
 }
+
 void menuWorkWithUser() {//меню для работы с учетными записями
     while (1) {
         // system("cls");
@@ -703,7 +722,7 @@ void menuWorkWithUser() {//меню для работы с учетными за
 }
 
 void individualTask() {//индивидуальное задание
-    system("cls");
+    /*system("cls");
     vector<Medical> medicals = readMedicalFromFile();
     int month, year; double payment = 0;
     cout << "Введите номер месяца: ";
@@ -739,26 +758,29 @@ void individualTask() {//индивидуальное задание
     if (count > 0) {
         cout << "Общая сумма выплат за" << month << "месяц " << year << "год составила " << payment << endl;
     }
-    else { cout << "Выплаты не производились" << endl; }
+    else { cout << "Выплаты не производились" << endl; }*/
 }
-void searchSurname() {//поиск по фамилии
+ 
+
+void searchProductType() {//поиск по виду изделия
     system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    string surname;
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    string productType;
     int count = 0;
     int a = 0;
-    cout << "--Поиск по фамилии--" << endl;
-    cout << "Введите фамилию: ";
-    surname = checkString(surname);
+    cout << "--Поиск по виду изделия--" << endl;
+    cout << "Введите вид изделия: ";
+    productType = checkString(productType);
     headTable();
-    for (int i = 0; i < medicals.size(); i++) {
-        if (medicals.at(i).Fio.surname == surname) {
+    for (int i = 0; i < jewelryProducts.size(); i++) {
+        if (jewelryProducts.at(i).productType == productType) {
             count++;
-            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << medicals.at(i).Fio.surname << " | "
-                << std::setw(10) << medicals.at(i).Fio.name << " | "
-                << std::setw(14) << medicals.at(i).Fio.patronymic << "|" << setw(5) << medicals.at(i).Data.day << "|" << setw(5) << medicals.at(i).Data.month << "|" << setw(7) << medicals.at(i).Data.year << "|"
-                << setw(12) << medicals.at(i).day_salary << "|" << setw(15) << medicals.at(i).quantity_miss_day << "|";
-            if (medicals.at(i).quantity_miss_day >= 16) {
+            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).productType << " | "
+                << std::setw(10) << jewelryProducts.at(i).metall << " | "
+                << std::setw(14) << jewelryProducts.at(i).metallSample << "|" << setw(5) << jewelryProducts.at(i).price << "|" 
+                << setw(5) << jewelryProducts.at(i).amount << "|" << setw(7) << jewelryProducts.at(i).collection << "|";
+                
+            /*if (medicals.at(i).quantity_miss_day >= 16) {
                 cout << setw(9) << medicals.at(i).day_salary << "|";
                 medicals.at(i).pay_day = medicals.at(i).day_salary;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
@@ -769,7 +791,7 @@ void searchSurname() {//поиск по фамилии
                 medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
                 cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-            }
+            }*/
             cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
         }
     }
@@ -778,24 +800,26 @@ void searchSurname() {//поиск по фамилии
     }
 
 }
-void searchMonth() {// поиск по месяцу
+
+void searchMetall() {// поиск по виду металла
     system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    int month;
-    int a = 0;
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    string metall;
     int count = 0;
-    cout << "--Поиск по месяцу--" << endl;
-    cout << "Введите месяц: ";
-    month = inputNumber(1, 12);
+    int a = 0;
+    cout << "--Поиск по виду металла--" << endl;
+    cout << "Введите вид металла: ";
+    metall = checkString(metall);
     headTable();
-    for (int i = 0; i < medicals.size(); i++) {
-        if (medicals.at(i).Data.month == month) {
+    for (int i = 0; i < jewelryProducts.size(); i++) {
+        if (jewelryProducts.at(i).metall == metall) {
             count++;
-            cout << "|" << setw(3) << a << "|" << std::setw(16) << medicals.at(i).Fio.surname << " | "
-                << std::setw(10) << medicals.at(i).Fio.name << " | "
-                << std::setw(14) << medicals.at(i).Fio.patronymic << "|" << setw(5) << medicals.at(i).Data.day << "|" << setw(5) << medicals.at(i).Data.month << "|" << setw(7) << medicals.at(i).Data.year << "|"
-                << setw(12) << medicals.at(i).day_salary << "|" << setw(15) << medicals.at(i).quantity_miss_day << "|";
-            if (medicals.at(i).quantity_miss_day >= 16) {
+            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).productType << " | "
+                << std::setw(10) << jewelryProducts.at(i).metall << " | "
+                << std::setw(14) << jewelryProducts.at(i).metallSample << "|" << setw(5) << jewelryProducts.at(i).price << "|" 
+                << setw(5) << jewelryProducts.at(i).amount << "|" << setw(7) << jewelryProducts.at(i).collection << "|";
+                
+            /*if (medicals.at(i).quantity_miss_day >= 16) {
                 cout << setw(9) << medicals.at(i).day_salary << "|";
                 medicals.at(i).pay_day = medicals.at(i).day_salary;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
@@ -806,7 +830,7 @@ void searchMonth() {// поиск по месяцу
                 medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
                 cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-            }
+            }*/
             cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
         }
     }
@@ -815,24 +839,25 @@ void searchMonth() {// поиск по месяцу
     }
 
 }
-void searchYear() {//поиск по году
+
+void searchPrice() {//поиск по цене
     system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    int year;
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    int price;
     int count = 0;
     int a = 0;
-    cout << "--Поиск по году--" << endl;
-    cout << "Введите год: ";
-    year = inputNumber(1970, 2023);
+    cout << "--Поиск по цене--" << endl;
+    cout << "Введите цену: ";
+    price = inputNumber(0, 10000);
     headTable();
-    for (int i = 0; i < medicals.size(); i++) {
-        if (medicals.at(i).Data.year == year) {
+    for (int i = 0; i < jewelryProducts.size(); i++) {
+        if (jewelryProductss.at(i).price == price) {
             count++;
-            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << medicals.at(i).Fio.surname << " | "
-                << std::setw(10) << medicals.at(i).Fio.name << " | "
-                << std::setw(14) << medicals.at(i).Fio.patronymic << "|" << setw(5) << medicals.at(i).Data.day << "|" << setw(5) << medicals.at(i).Data.month << "|" << setw(7) << medicals.at(i).Data.year << "|"
-                << setw(12) << medicals.at(i).day_salary << "|" << setw(15) << medicals.at(i).quantity_miss_day << "|";
-            if (medicals.at(i).quantity_miss_day >= 16) {
+            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).productType << " | "
+                << std::setw(10) << jewelryProducts.at(i).metall << " | "
+                << std::setw(14) << jewelryProducts.at(i).metallSample << "|" << setw(5) << jewelryProducts.at(i).price << "|" 
+                << setw(5) << jewelryProducts.at(i).amount << "|" << setw(7) << jewelryProducts.at(i).collection << "|"
+            /*if (medicals.at(i).quantity_miss_day >= 16) {
                 cout << setw(9) << medicals.at(i).day_salary << "|";
                 medicals.at(i).pay_day = medicals.at(i).day_salary;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
@@ -843,7 +868,7 @@ void searchYear() {//поиск по году
                 medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
                 cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-            }
+            }*/
             cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
         }
     }
@@ -853,24 +878,24 @@ void searchYear() {//поиск по году
 
 
 }
-void searchQuantity() {//поиск по количеству пропущенных дней
+void searchAmount() {//поиск по количеству
     system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    int quantity;
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    int amount;
     int count = 0;
     int a = 0;
-    cout << "--Поиск по количеству пропущенных дней--" << endl;
-    cout << "Введите количество дней: ";
-    quantity = inputNumber(1, 60);
+    cout << "--Поиск по количеству товара в наличии--" << endl;
+    cout << "Введите количество товара в наличии: ";
+    amount = inputNumber(0, 100);
     headTable();
     for (int i = 0; i < medicals.size(); i++) {
-        if (medicals.at(i).quantity_miss_day == quantity) {
+        if (jewelryProducts.at(i).amount == amount) {
             count++;
-            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << medicals.at(i).Fio.surname << " | "
-                << std::setw(10) << medicals.at(i).Fio.name << " | "
-                << std::setw(14) << medicals.at(i).Fio.patronymic << "|" << setw(5) << medicals.at(i).Data.day << "|" << setw(5) << medicals.at(i).Data.month << "|" << setw(7) << medicals.at(i).Data.year << "|"
-                << setw(12) << medicals.at(i).day_salary << "|" << setw(15) << medicals.at(i).quantity_miss_day << "|";
-            if (medicals.at(i).quantity_miss_day >= 16) {
+           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).productType << " | "
+                << std::setw(10) << jewelryProducts.at(i).metall << " | "
+                << std::setw(14) << jewelryProducts.at(i).metallSample << "|" << setw(5) << jewelryProducts.at(i).price << "|" 
+                << setw(5) << jewelryProducts.at(i).amount << "|" << setw(7) << jewelryProducts.at(i).collection << "|"
+            /*if (medicals.at(i).quantity_miss_day >= 16) {
                 cout << setw(9) << medicals.at(i).day_salary << "|";
                 medicals.at(i).pay_day = medicals.at(i).day_salary;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
@@ -881,7 +906,7 @@ void searchQuantity() {//поиск по количеству пропущенн
                 medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
                 cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-            }
+            }*/
             cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
         }
     }
@@ -891,24 +916,24 @@ void searchQuantity() {//поиск по количеству пропущенн
 
 
 }
-void searchDaySalary() {//поиск по дневной зарплате
-    system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    int day_salary;
+void searcMetallSample() {//поиск по пробе металла
+system("cls");
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    int metallSample;
     int count = 0;
     int a = 0;
-    cout << "--Поиск по дневной зарплате--" << endl;
-    cout << "Введите зарплату: ";
-    day_salary = inputNumber(1, 100);
+    cout << "--Поиск по пробе металла--" << endl;
+    cout << "Введите пробу металла: ";
+    amount = inputNumber(375, 950);
     headTable();
-    for (int i = 0; i < medicals.size(); i++) {
-        if (medicals.at(i).day_salary == day_salary) {
+    for (int i = 0; i < jewelryProducts.size(); i++) {
+        if (jewelryProducts.at(i).metallSample == metallSample) {
             count++;
-            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << medicals.at(i).Fio.surname << " | "
-                << std::setw(10) << medicals.at(i).Fio.name << " | "
-                << std::setw(14) << medicals.at(i).Fio.patronymic << "|" << setw(5) << medicals.at(i).Data.day << "|" << setw(5) << medicals.at(i).Data.month << "|" << setw(7) << medicals.at(i).Data.year << "|"
-                << setw(12) << medicals.at(i).day_salary << "|" << setw(15) << medicals.at(i).quantity_miss_day << "|";
-            if (medicals.at(i).quantity_miss_day >= 16) {
+            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).productType << " | "
+                << std::setw(10) << jewelryProducts.at(i).metall << " | "
+                << std::setw(14) << jewelryProducts.at(i).metallSample << "|" << setw(5) << jewelryProducts.at(i).price << "|" 
+                << setw(5) << jewelryProducts.at(i).amount << "|" << setw(7) << jewelryProducts.at(i).collection << "|";
+            /*if (medicals.at(i).quantity_miss_day >= 16) {
                 cout << setw(9) << medicals.at(i).day_salary << "|";
                 medicals.at(i).pay_day = medicals.at(i).day_salary;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
@@ -919,7 +944,7 @@ void searchDaySalary() {//поиск по дневной зарплате
                 medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
                 medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
                 cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-            }
+            }*/
             cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
         }
     }
@@ -928,129 +953,175 @@ void searchDaySalary() {//поиск по дневной зарплате
     }
 
 }
-void searchMedical() {//поиск больничных
+
+void searchCollection() {// поиск по коллекции
+    system("cls");
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    string collection;
+    int count = 0;
+    int a = 0;
+    cout << "--Поиск по виду металла--" << endl;
+    cout << "Введите вид металла: ";
+    collection = checkString(collection);
+    headTable();
+    for (int i = 0; i < jewelryProducts.size(); i++) {
+        if (jewelryProducts.at(i).collection == collection) {
+            count++;
+            cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).productType << " | "
+                << std::setw(10) << jewelryProducts.at(i).metall << " | "
+                << std::setw(14) << jewelryProducts.at(i).metallSample << "|" << setw(5) << jewelryProducts.at(i).price << "|" 
+                << setw(5) << jewelryProducts.at(i).amount << "|" << setw(7) << jewelryProducts.at(i).collection << "|";
+                
+            /*if (medicals.at(i).quantity_miss_day >= 16) {
+                cout << setw(9) << medicals.at(i).day_salary << "|";
+                medicals.at(i).pay_day = medicals.at(i).day_salary;
+                medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
+                cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
+            }
+            else {
+                cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
+                medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
+                medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
+                cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
+            }*/
+            cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+        }
+    }
+    if (count == 0) {
+        cout << "Ничего не найдено" << endl;
+    }
+
+}
+
+void searchJewelry() {//поиск товаров
     system("cls");
     cout << "--------------Введите--------------" << endl;
     int choice;
     vector<Medical> medicals = readMedicalFromFile();
-    cout << "1 - для поиска по фамилии" << endl;
-    cout << "2 - для поиска по месяцу" << endl;
-    cout << "3 - для поиска по году" << endl;
-    cout << "4 - для поиска по количеству пропущенных дней" << endl;
-    cout << "5 - для поиска по дневной зарплате" << endl;
+    cout << "1 - для поиска по цене" << endl;
+    cout << "2 - для поиска по количеству" << endl;
+    cout << "3 - для поиска по виду изделия" << endl;
+    cout << "4 - для поиска по виду металла" << endl;
+    cout << "5 - для поиска по пробе металла" << endl;
+    cout << "6 - для поиска по названию коллекции" << endl;
     cout << "Ваш выбор:  ";
-    choice = inputNumber(1, 5);
+    choice = inputNumber(1, 6);
     switch (choice) {
     case 1: {
-        searchSurname();
+        searchPrice();//поиск по цене 
         break;
 
     }
     case 2: {
-        searchMonth();
+        searchAmount(); //поиск по количеству
         break;
     }
     case 3: {
-        searchYear();
+        searchProductType(); //поиск по виду изделия
         break;
     }
     case 4: {
-        searchQuantity();
+        searchMetall(); //поиск по виду металла
         break;
 
     }
     case 5: {
-        searchDaySalary();
+        searcMetallSample(); //поиск по пробе металла
+        break;
+    }
+    case 6: {
+        searchCollection(); //поиск по пробе металла
         break;
     }
     }
 }
+
 void menuSort() {//меню сортировки
     system("cls");
-    vector<Medical> medicals = readMedicalFromFile();
-    vector<Medical> medicals_temp;
-    medicals_temp = medicals;
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    vector<Jewelry> jewelry_temp;
+    jewelry_temp = jewelryProducts;
     int choice;
     cout << "---—Сортировка---" << endl;
-    cout << "1 - по фамилии " << endl;
-    cout << "2 - по номеру месяца " << endl;
-    cout << "3 - по номеру года" << endl;
-    cout << "4 - по количеству дней пропущенных по болезни" << endl;
-    cout << "5 - по дневной зарплате" << endl;
+    cout << "1 - по цене " << endl;
+    cout << "2 - по количеству товара в наличии " << endl;
+    cout << "3 - по виду металла" << endl;
+    cout << "4 - по пробе металла" << endl;
     cout << "Ваш выбор:" << endl;
-    choice = inputNumber(1, 5);
+    choice = inputNumber(1, 4);
     switch (choice) {
     case 1: {
-        sort(medicals_temp.begin(), medicals_temp.end(), isSortBySurname);
+        sort(jewelry_temp.begin(), jewelry_temp.end(), isSortByPrice);
         break;
     }
     case 2: {
-        sort(medicals_temp.begin(), medicals_temp.end(), isSortByMonth);
+        sort(jewelry_temp.begin(), jewelry_temp.end(), isSortByAmount);
         break;
     }
     case 3: {
-        sort(medicals_temp.begin(), medicals_temp.end(), isSortByYear);
+        sort(jewelry_temp.begin(), jewelry_temp.end(), isSortByMetallSample);
         break;
     }
     case 4: {
-        sort(medicals_temp.begin(), medicals_temp.end(), isSortByDay);
-        break;
-    }
-    case 5: {
-        sort(medicals_temp.begin(), medicals_temp.end(), isSortBySalary);
+        sort(jewelry_temp.begin(), jewelry_temp.end(), isSortByMetall);
         break;
     }
     }
     cout << "--Успешно отсортировано--" << endl;
-    printMedicalTable(medicals_temp);
+    printJewelryTable(jewelry_temp);
 
 }
-bool isSortBySurname(Medical name_a, Medical name_b) {//ÙÛÌÍˆËˇ-ÍÓÏÔ‡‡ÚÓ
-    return name_a.Fio.surname < name_b.Fio.surname;
+
+bool isSortByPrice(Jewelry price_a, Jewelry price_b){//сортировка по цене
+  return price_a.price < price_b.price;
+} 
+
+bool isSortByAmount(Jewelry amount_a, Jewelry amounth_b){//сортировка по количеству в наличии
+  return amount_a.amount < amount_b.amount;
 }
-bool isSortByMonth(Medical month_a, Medical month_b) {//ÙÛÌÍˆËˇ-ÍÓÏÔ‡‡ÚÓ
-    return month_a.Data.month < month_b.Data.month;
+
+bool isSortByMetallSample(Jewelry sample_a, Jewelry sample_b){//сортировка по пробе металла
+  return sample_a.metallSample < sample_b.metallSample;
+} 
+
+bool isSortByMetall(Jewelry metall_a, Jewelry metall_b){//сортировка по виду металла
+  return metall_a.metall < metall_b.metall;
 }
-bool isSortByYear(Medical year_a, Medical year_b) {//ÙÛÌÍˆËˇ-ÍÓÏÔ‡‡ÚÓ
-    return year_a.Data.year < year_b.Data.year;
-}
-bool isSortByDay(Medical day_a, Medical day_b) {//ÙÛÌÍˆËˇ-ÍÓÏÔ‡‡ÚÓ
-    return day_a.quantity_miss_day < day_b.quantity_miss_day;
-}
-bool isSortBySalary(Medical salary_a, Medical salary_b) {//ÙÛÌÍˆËˇ-ÍÓÏÔ‡‡ÚÓ
-    return salary_a.day_salary < salary_b.day_salary;
-}
-void menuWorkWithMedical() {//меню для работы с больничными
+
+ 
+ 
+
+void menuWorkWithJewelry() {//меню для работы с товарами
     while (1) {
         // system("cls");
         cout << "--------------Введите--------------" << endl;
         int choice;
         vector<Medical> medicals = readMedicalFromFile();
-        cout << "1 - для вывода всех больничных листов" << endl;
-        cout << "2 - добавить больничный лист" << endl;
-        cout << "3 - для редактирования больничных листов" << endl;
-        cout << "4 - чтобы удалить больничный лист" << endl;
-        cout << "5 - для вывода выплат за определенный месяц" << endl;
-        cout << "6 - для поиска больничного листа" << endl;
-        cout << "7 - для сортировки больничных листов" << endl;
+        cout << "1 - для отображения перечня ювелирных изделий" << endl;
+        cout << "2 - для добавления товара" << endl;
+        cout << "3 - для редактирования товара" << endl;
+        cout << "4 - для удаления товара" << endl;
+        cout << "5 - для оформления заказа или предзаказа" << endl;
+        cout << "6 - для поиска товара" << endl;
+        cout << "7 - для сортировки товаров" << endl;
         cout << "8 - для выхода" << endl;
         cout << "Ваш выбор:  ";
         choice = inputNumber(1, 8);
         switch (choice) {
         case 1: {
-            printMedicalTable(medicals);
+            printJewelryTable(jewelryProducts);
             break;
         }
         case 2: {
-            addMedical();
+            addJewelry();
             break;
         }
         case 3: {
-            editMedical();
+            editJewelry();
             break;
         }
         case 4: {
-            deleteMedical();
+            deleteJewelry();
             break;
         }
         case 5: {
@@ -1058,7 +1129,7 @@ void menuWorkWithMedical() {//меню для работы с больничны
             break;
         }
         case 6: {
-            searchMedical();
+            searchJewelry(); 
             break;
         }
         case 7: {
@@ -1071,27 +1142,28 @@ void menuWorkWithMedical() {//меню для работы с больничны
         }
     }
 }
+
 void menuUser() {//меню пользователя
     while (1) {
         cout << "Добро пожаловать в меню пользователя" << endl;
         cout << "--------------Введите--------------" << endl;
         int choice;
-        vector<Medical> medicals = readMedicalFromFile();
+        vector<Jewelry> jewelryProducts = readJewelryFromFile();
         cout << "1 - для просмотра данных" << endl;
         cout << "2 - для поиска данных" << endl;
         cout << "3 - для сортировки данных" << endl;
-        cout << "4 - для вывода выплат за определенный месяц" << endl;
+        cout << "4 - для оформления заказа или предзаказа" << endl;
         cout << "5 - для выхода" << endl;
         cout << "Ваш выбор:  ";
         choice = inputNumber(1, 5);
         switch (choice)
         {
         case 1: {
-            printMedicalTable(medicals);
+            printJewelryTable(medicals);
             break;
         }
         case 2: {
-            searchMedical();
+            searchJewelry();
             break;
         }
         case 3: {
@@ -1108,11 +1180,12 @@ void menuUser() {//меню пользователя
         }
     }
 }
+
 void menuAdministrator() {//меню администратора
     while (1) {
         system("cls");
         cout << "Добро пожаловать в меню администратора" << endl;
-        cout << "--------------Введите≈--------------" << endl;
+        cout << "--------------Введите--------------" << endl;
         int choice;
         cout << "1 - для работы с учетными записями" << endl;
         cout << "2 - для работы с данными" << endl;
@@ -1127,7 +1200,7 @@ void menuAdministrator() {//меню администратора
         }
         case 2: {
             system("cls");
-            menuWorkWithMedical();
+            menuWorkWithJewelry();
             break;
         }
         case 3: {
@@ -1136,6 +1209,7 @@ void menuAdministrator() {//меню администратора
         }
     }
 }
+
 bool checkLoginAndPassword(std::vector<User>& users, std::string login, std::string password) {//проверка логина и пароля
     for (auto& user : users) {
         if (user.login == login && user.password == password) {
@@ -1148,6 +1222,7 @@ bool checkLoginAndPassword(std::vector<User>& users, std::string login, std::str
     std::cout << "Неверный логин или пароль!" << std::endl;
     return false;
 }
+
 bool checkLoginAndPasswordRegist(std::vector<User>& users, std::string login, std::string password, bool isAdmin) {//проверка на существование пользователя
     for (auto& user : users) {
         if (user.login == login && user.password == password && user.isAdmin == isAdmin) {
@@ -1158,11 +1233,9 @@ bool checkLoginAndPasswordRegist(std::vector<User>& users, std::string login, st
     return true;
 }
 
- 
-
 void authorization() {//авторизация
         
-    cout << "Authorization" << std::endl;
+    cout << "Авторизация:" << std::endl;
     string login, password;
     vector<User> accounts = readAccountsFromFile(); // Ваша функция для чтения пользователей из файла
     bool isLoggedIn = false;
@@ -1208,7 +1281,7 @@ void authorization() {//авторизация
 
 void registration() {//регистрация
     //system("cls");
-    cout << "Регистрация" << endl;
+    cout << "Регистрация:" << endl;
     string login, password;
     bool isAdmin;
     vector<User> accounts = readAccountsFromFile();
@@ -1246,6 +1319,7 @@ string encrypt(string input) {//шифровка
     }
     return output;
 }
+
 string decrypt(string input) {//дешифровка
     string output(input.size(), ' ');
     for (int i = 0; i < input.size(); i++) {
