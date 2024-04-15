@@ -110,7 +110,7 @@ void start_menu() {//начальное меню
 }
 
 void writeUsersToFile(const vector<User>& users) {//запись пользователей в файл
-   string filename = "users.txt";
+   string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/users.txt";
    std::ofstream outputFile(filename);
 
    if (!outputFile.is_open()) {
@@ -123,11 +123,12 @@ void writeUsersToFile(const vector<User>& users) {//запись пользов�
    }
 
    outputFile.close();
+    
 }
 
 
 vector<User> readAccountsFromFile() {//достать пользователей из файла в вектор
-   string fileName = "accounts.txt";
+   string fileName = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/accounts.txt";
    std::vector<User> accounts;
    std::ifstream inFile(fileName);
    if (inFile.is_open()) {
@@ -163,7 +164,7 @@ void printAccountsTable(const std::vector<User>& accounts) {//вывод таб�
 }
 
 vector<User> readUsersFromFile() {//достать пользователей из файла в вектор
-   string fileName = "users.txt";
+   string fileName = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/users.txt";
    std::vector<User> users;
    std::ifstream inFile(fileName);
    if (inFile.is_open()) {
@@ -208,7 +209,7 @@ vector<User> readUsersFromFile() {//достать пользователей и
 }*/
 
 vector<Jewelry> readJewelryFromFile() {//достать записи из файла в вектор
-   string fileName = "jewelry.txt";
+   string fileName = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelry.txt";
    vector<Jewelry> jewelryProducts;
    ifstream inputFile(fileName);
    if (inputFile.is_open()) {
@@ -236,7 +237,7 @@ vector<Jewelry> readJewelryFromFile() {//достать записи из фай
 }
 
 void writeAccountsToFile(const vector<User>& accounts) {//Запись аккаунтов в файл
-   string filename = "accounts.txt";
+   string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/accounts.txt";
    std::ofstream outputFile(filename);
 
    if (!outputFile.is_open()) {
@@ -283,7 +284,7 @@ void writeAccountsToFile(const vector<User>& accounts) {//Запись акка�
 
 
 void writeJewelryToFile( std::vector<Jewelry>& jewelryProducts) {//запись больничных в файл
-   string filename = "jewelry.txt";
+   string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelry.txt";
    std::ofstream outputFile(filename);
 
    if (!outputFile.is_open()) {
@@ -445,7 +446,7 @@ void addaccount() {//Добавить аккаунт
        cout << "Введите пароль" << endl;
        cin >> password;
        cout << "Является ли админом (0,1)" << endl;
-       isAdmin = inputNumber(0, 1);
+       isAdmin = inputNumber(0,1);
        if (checkLoginAndPasswordRegist(users, login, password, isAdmin)) {
            break;
        }
@@ -588,7 +589,8 @@ void editAccount() {//редактирование аккаунтов
         system("cls");
         vector<User> users = readUsersFromFile();
         printUsersTable(users);
-        int i = 0;    int choice, number_for_edit;
+        int i = 0;    
+        int choice, number_for_edit;
         string newLogin;
         cout << "Введите номер аккаунта, который хотите изменить: " << endl;
         number_for_edit = inputNumber(1, users.size());
@@ -624,63 +626,67 @@ void editAccount() {//редактирование аккаунтов
                 break;
             }
             case 2: {
-                /*cout << "--Новый пароль--" << endl;
-                 for (int i = 0; i < users.size(); i++)
-                 if (users.at(number_for_edit - 1).login == global_login) {
-                 cout << "Изменить пароль невозможно" << endl;
-                 break;
-                 }
-                 else {
-                 cout << "0 - роль администратора" << endl;
-                 cout << "1 - роль пользователя" << endl;
-                 users.at(number_for_edit - 1).isAdmin = inputNumber(0, 1);
-                 writeUsersToFile(users);
-                 cout << "---Успешно отредактировано---" << endl;
-                 break;
-                 
-                 }
+                cout << "--Новый пароль--" << endl;
+                bool userFound = false;
+                int i = 0;
+                while (i < users.size() && !userFound) {
+                    if (users.at(i).getLogin() == global_login) {
+                        cout << "Изменить пароль невозможно" << endl;
+                        userFound = true;
+                    }
+                    i++;
+                }
+
+                if (!userFound) {
+                    cout << "0 - роль администратора" << endl;
+                    cout << "1 - роль пользователя" << endl;
+                    users.at(number_for_edit - 1).setIsAdmin(inputNumber(0, 1));
+                    writeUsersToFile(users);
+                    cout << "---Успешно отредактировано---" << endl;
+                }
                  break;
                  }
                  case 3: {
-                 cout << "--Новый логин--" << endl;
-                 cin >> login;
-                 while (i < users.size()) {
-                 if (users.at(i).login == login) {
-                 cout << "Данный логин занят, повторите попытку" << endl;
-                 cin >> login;
-                 i = 0;
-                 }
-                 else i++;
-                 }
-                 users.at(number_for_edit - 1).login = login;
+                   cout << "--Новый логин--" << endl;
+                   cin >> newLogin;
+                   while (i < users.size()) {
+                    if (users.at(i).getLogin() == newLogin) {
+                     cout << "Данный логин занят, повторите попытку" << endl;
+                     cin >> newLogin;
+                     i = 0;
+                    }
+                    else i++;
+                    }
+                 users.at(number_for_edit - 1).setLogin(newLogin);
                  cout << "--Новый пароль--" << endl;
-                 for (int i = 0; i < users.size(); i++)
-                 if (users.at(number_for_edit - 1).login == global_login) {
-                 cout << "Изменить роль невозможно" << endl;
-                 break;
-                 }
-                 else {
-                 cout << "0 - роль администратора" << endl;
-                 cout << "1 - роль пользователя" << endl;
-                 users.at(number_for_edit - 1).isAdmin = inputNumber(0, 1);
-                 writeUsersToFile(users);
-                 cout << "---Успешно отредактировано---" << endl;
-                 break;
-                 
-                 }
-                 
+                     bool userFound = false;
+                     int i = 0;
+                     while (i < users.size() && !userFound) {
+                         if (users.at(i).getLogin() == global_login) {
+                             cout << "Изменить пароль невозможно" << endl;
+                             userFound = true;
+                         }
+                         i++;
+                     }
+
+                     if (!userFound) {
+                         cout << "0 - роль администратора" << endl;
+                         cout << "1 - роль пользователя" << endl;
+                         users.at(number_for_edit - 1).setIsAdmin(inputNumber(0, 1));
+                         writeUsersToFile(users);
+                         cout << "---Успешно отредактировано---" << endl;
+                     }
                  break;
                  
                  }
                  case 4: {
                  return;
                  }
-                 }*/
+                 }
                 
             }
         }
-    }
-}
+    
        
 
 void menuWorkWithUser() {//меню для работы с учетными записями
@@ -724,7 +730,8 @@ void menuWorkWithUser() {//меню для работы с учетными за
    }
 }
 
-void individualTask() {//индивидуальное задание
+void individualTask() {
+    cout <<"Uraaa"<<endl;//индивидуальное задание
    /*system("cls");
    vector<Medical> medicals = readMedicalFromFile();
    int month, year; double payment = 0;
