@@ -320,7 +320,7 @@ void headTable() {//шапка таблицы товаров
     cout<<" | ";
         cout << left << setw(23) << "Количество";
     cout<<" | ";
-        cout << left << setw(22) << "Коллекция";
+        cout << left << setw(22) << "Бренд";
     cout<<" |"<<endl;
         cout << "----------------------------------------------------------------------------------------------------------------" << endl;
 }
@@ -370,8 +370,16 @@ void addJewelry() {//добавить товар
        productType = checkString(productType);
        cout << "Введите вид металла:" << endl;
        metall = checkString(metall);
-       cout << "Введите пробу металла:" << endl;
-       metallSample = inputNumber(375, 950);
+       cout << "Введите пробу металла (1. 375, 2. 500, 3. 750, 4. 958):" << endl;
+       int validSamples[] = {375, 500, 750, 958};
+       int sampleIndex = inputNumber(0, 3);
+       while (validSamples[sampleIndex] != 375 && validSamples[sampleIndex] != 500 &&
+       validSamples[sampleIndex] != 750 && validSamples[sampleIndex] != 958)
+       {
+            cout << "Выбранная проба металла недопустима. Пожалуйста, выберите снова:" << endl;
+            sampleIndex = inputNumber(0, 3);
+       }
+       metallSample = validSamples[sampleIndex];
        cout << "Введите цену за 1 единицу товара:" << endl;
        price = inputNumber(1, 10000);
        cout << "Введите количество данного товара в наличии:" << endl;
@@ -911,7 +919,7 @@ void searcMetallSample() {//поиск по пробе металла
 
 }
 
-void searchCollection() {// поиск по коллекции
+void searchBrand() {// поиск по коллекции
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    string brand;
    int count = 0;
@@ -984,7 +992,7 @@ void searchJewelry() {//поиск товаров
        break;
    }
    case 6: {
-       searchCollection(); //поиск по пробе металла
+       searchBrand(); //поиск по пробе металла
        break;
    }
    }
