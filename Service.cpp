@@ -1,4 +1,4 @@
- 
+
 
 
 #include "Header.h"
@@ -83,31 +83,32 @@ int inputNumber(int left_range, int right_range) {//ввод числа
 }
 
 void start_menu() {//начальное меню
-   while (1) {
-      system("cls");
-       int choice;
-       cout << "-------Введите-------- \n 1. Для регистрации \n 2. Для авторизации\n 3. Для выхода \n";
-       choice = inputNumber(1, 3);
-       switch (choice) {
-       case 1: {
-           system("cls");
-           registration();
-           sleep(3);
-           break;
-       }
-       case 2: {
-           system("cls");
-           authorization();
-           break;
-       }
-       case 3: {
-           return;
-
-       }
-       }
+    int choice;
+    do{
+         
+        cout << "-------Введите-------- \n 1. Для регистрации \n 2. Для авторизации\n 3. Для выхода \n";
+        cout << "Ваш выбор?" <<endl;
+        choice = inputNumber(1, 3);
+        switch (choice) {
+            case 1: {
+                registration();
+                sleep(3);
+                break;
+            }
+            case 2: {
+                authorization();
+                break;
+            }
+            case 3: {
+                cout<<"Совершен выход из программы.";
+                break;
+                
+            }
+        }
+    }while(choice!=3);
 
    }
-}
+
 
 void writeUsersToFile(const vector<User>& users) {//запись пользователей в файл
    string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/users.txt";
@@ -123,7 +124,6 @@ void writeUsersToFile(const vector<User>& users) {//запись пользов�
    }
 
    outputFile.close();
-    
 }
 
 
@@ -135,7 +135,11 @@ vector<User> readAccountsFromFile() {//достать пользователей
        std::string login, password, isAdminStr;
        while (inFile >> login >> password >> isAdminStr) {
            bool isAdmin = (isAdminStr == "1");
-           accounts.push_back(User{ login,decrypt(password), isAdmin });
+           User newUser;
+           newUser.setLogin(login);
+           newUser.setPassword(decrypt(password));
+           newUser.setIsAdmin(isAdmin);
+           accounts.push_back(newUser);
        }
        inFile.close();
    }
@@ -146,21 +150,19 @@ vector<User> readAccountsFromFile() {//достать пользователей
 }
 
 void printAccountsTable(const std::vector<User>& accounts) {//вывод таблицы аккаунтов
-   system("cls");
    // вывод заголовка таблицы
-   cout << "---------------------------------------" << endl;
-   std::cout << "|" << setw(3) << "Аккаунт" << "|" << std::setw(10) << "Логин" << " | "
-       << std::setw(10) << "Пароль" << " | "
-       << std::setw(7) << "Админ" << "|" << std::endl;
-   cout << "---------------------------------------" << endl;
-   int i = 0;
-   // вывод строк таблицы
-   for (const auto& account : accounts) {
-       std::cout << "|" << setw(3) << ++i << "|" << std::setw(10) << account.getLogin() << " | "
-           << std::setw(10) << encrypt(account.getPassword()) << " | "
-           << std::setw(7) << (account.getIsAdmin() ? "Да" : "Нет") << "|" << std::endl;
-       cout << "---------------------------------------" << endl;
-   }
+    cout << "--------------------------------------------------------" << endl;
+        cout << "|" << setw(3) << "№" << "|" << setw(10) << "Логин" << " | "
+             << setw(10) << "Пароль" << " | " << setw(7) << "Админ" << "|" << endl;
+        cout << "--------------------------------------------------------" << endl;
+        int i = 0;
+    //вывод строк таблицы
+        for (const auto& account : accounts) {
+            cout << "|" << setw(3) << ++i << "|" << setw(10) << account.getLogin() << " | "
+                 << setw(10) << account.getPassword() << " | "
+                 << setw(7) << (account.getIsAdmin() ? "Да" : "Нет") << "|" << endl;
+            cout << "--------------------------------------------------------" << endl;
+        }
 }
 
 vector<User> readUsersFromFile() {//достать пользователей из файла в вектор
@@ -171,7 +173,11 @@ vector<User> readUsersFromFile() {//достать пользователей и
        std::string login, password, isAdminStr;
        while (inFile >> login >> password >> isAdminStr) {
            bool isAdmin = (isAdminStr == "1");
-           users.push_back(User{ login,decrypt(password), isAdmin });
+           User newUser;
+           newUser.setLogin(login);
+           newUser.setPassword(decrypt(password));
+           newUser.setIsAdmin(isAdmin);
+           users.push_back(newUser);
        }
        inFile.close();
    }
@@ -181,48 +187,29 @@ vector<User> readUsersFromFile() {//достать пользователей и
    return users;
 }
 
-/*vector<Medical> readMedicalFromFile() {//достать записи из файла в вектор
-   string fileName = "medicals.txt";
-   vector<Medical> medicals;
-   ifstream inputFile(fileName);
-   if (inputFile.is_open()) {
-       //Medical medical;
-       string surname, name, patronymic;
-       int day, month, year;
-       double day_salary, quantity_miss_day,pay_day,result_pay;
-       while (inputFile >> surname >> name >> patronymic
-           >> day >>month >> year
-           >> day_salary >> quantity_miss_day >> pay_day >> result_pay)
-       {
-           // добавляем структуру в вектор
-           medicals.push_back(Medical{ FIO{surname,name,patronymic},Date{day,month,year},day_salary, quantity_miss_day,pay_day,result_pay });
-       }
-
-       inputFile.close();
-   }
-   else {
-       cerr << "Ошибка открытия файла " << fileName << endl;
-       return medicals;
-
-   }
-   return medicals;
-}*/
+ 
 
 vector<Jewelry> readJewelryFromFile() {//достать записи из файла в вектор
-   string fileName = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelry.txt";
+   string fileName = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelrypr.txt";
    vector<Jewelry> jewelryProducts;
    ifstream inputFile(fileName);
    if (inputFile.is_open()) {
-       //Medical medical;
-       int price, amount, metallSample;
         
-       string productType, metall, collection;
+       int price, amount, metallSample;
+       string productType, metall, brand;
        
-       while (inputFile >> price >> amount >> metallSample
-           >> productType >> metall >> collection)
+       
+       
+       while (inputFile >> productType >> metall >> metallSample
+           >> price >> amount >> brand)
        {
-           // добавляем класс в вектор
-           Jewelry j(price, amount, productType, metall, metallSample, collection);
+           Jewelry j;
+           j.setProductType(productType);
+           j.setMetall(metall);
+           j.setMetallSample(metallSample);
+           j.setPrice(price);
+           j.setAmount(amount);
+           j.setBrand(brand);
            jewelryProducts.push_back(j);
        }
 
@@ -252,8 +239,11 @@ void writeAccountsToFile(const vector<User>& accounts) {//Запись акка�
    outputFile.close();
 }
 
-/*void writeJewelryToFile( std::vector<Medical>& medicals) {//запись больничных в файл
-   string filename = "medicals.txt";
+
+
+
+void writeJewelryToFile( std::vector<Jewelry>& jewelryProducts) {//запись товаров в файл
+   string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelrypr.txt";
    std::ofstream outputFile(filename);
 
    if (!outputFile.is_open()) {
@@ -261,50 +251,10 @@ void writeAccountsToFile(const vector<User>& accounts) {//Запись акка�
        return;
    }
 
-   for ( Medical& medical : medicals) {
-       outputFile << medical.Fio.surname << " " << medical.Fio.name << " " << medical.Fio.patronymic << " " << medical.Data.day << " "
-           << medical.Data.month << " " << medical.Data.year << " " << medical.day_salary << " "
-           << medical.quantity_miss_day << " ";
-       if (medical.quantity_miss_day >= 16) {
-           medical.pay_day = medical.day_salary;
-           medical.result_pay = medical.quantity_miss_day * medical.day_salary;
-           outputFile << medical.day_salary << " " << medical.day_salary * medical.quantity_miss_day << endl;
-       }
-       else {
-           medical.pay_day = medical.day_salary*0.8;
-           medical.result_pay = medical.quantity_miss_day * medical.day_salary*0.8;
-           outputFile << medical.day_salary*0.8 << " " << medical.day_salary * medical.quantity_miss_day*0.8 << endl;
-       }
-   }
-
-
-   outputFile.close();
-}*/
-
-
-
-void writeJewelryToFile( std::vector<Jewelry>& jewelryProducts) {//запись больничных в файл
-   string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelry.txt";
-   std::ofstream outputFile(filename);
-
-   if (!outputFile.is_open()) {
-       std::cerr << "Ошибка открытия файла " << filename << " для записи." << std::endl;
-       return;
-   }
-
-   for ( Jewelry& jewelry : jewelryProducts) {
-       outputFile << jewelry.getPrice() << " " << jewelry.getAmount() << " " << jewelry.getMetallSample() << " " << jewelry.getProductType() << " "
-           << jewelry.getMetall() << " " << jewelry.getCollection() << " ";
-       /*if (medical.quantity_miss_day >= 16) {
-           medical.pay_day = medical.day_salary;
-           medical.result_pay = medical.quantity_miss_day * medical.day_salary;
-           outputFile << medical.day_salary << " " << medical.day_salary * medical.quantity_miss_day << endl;
-       }
-       else {
-           medical.pay_day = medical.day_salary*0.8;
-           medical.result_pay = medical.quantity_miss_day * medical.day_salary*0.8;
-           outputFile << medical.day_salary*0.8 << " " << medical.day_salary * medical.quantity_miss_day*0.8 << endl;
-       }*/
+   for (const Jewelry& jewelry : jewelryProducts) {
+       outputFile << jewelry.getProductType() << " " << jewelry.getMetall() << " " << jewelry.getMetallSample() << " " << jewelry.getPrice() << " "
+           << jewelry.getAmount() << " " << jewelry.getBrand() << std::endl;
+        
    }
 
 
@@ -313,62 +263,70 @@ void writeJewelryToFile( std::vector<Jewelry>& jewelryProducts) {//запись 
 
 void printUsersTable(const std::vector<User>& users)
 {//Вывод таблицы аккаунтов
-   system("cls");
    // Вывод заголовка таблицы
    cout << "---------------------------------------" << endl;
-   std::cout << "|" << setw(3) << "Пользователь" << "|" << std::setw(10) << "Логин" << " | "
-       << std::setw(10) << "Пароль" << " | "
-       << std::setw(7) << "Админ" << "|" << std::endl;
+   cout << "|" << setw(5) << "№" << "|" << setw(15) << "Логин" << " | "
+       << setw(16) << "Пароль" << " | "
+       << setw(10) << "Админ" << "|" << endl;
    cout << "---------------------------------------" << endl;
    int i = 0;
    // Вывод строк таблицы
    for (const auto& user : users) {
-       std::cout << "|" << setw(3) << ++i << "|" << std::setw(10) << user.getLogin() << " | "
-           << std::setw(10) << encrypt(user.getPassword()) << " | "
-           << std::setw(7) << (user.getIsAdmin() ? "Да" : "Нет") << "|" << std::endl;
+       cout << "|" << setw(3) << ++i << "|" << setw(10) << user.getLogin() << " | "
+           << setw(10) << encrypt(user.getPassword()) << " | "
+           << setw(7) << (user.getIsAdmin() ? "Да" : "  Нет") << "|" << endl;
        cout << "---------------------------------------" << endl;
    }
 }
 
-void printJewelryTable(std::vector<Jewelry>& jewelryProducts) {//вывод таблицы больничных
-   system("cls");
-   cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
-   cout << "|" << std::setw(16) << "Вид изделия" << " | "
-       << std::setw(10) << "Металл" << " | "
-       << std::setw(14) << "Проба" << "|" << setw(5) << "Цена" << "|" << setw(5) << "Количество" << "|" << setw(7) << "Коллекция" << "|" << std::endl;
-   cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+void printJewelryTable(std::vector<Jewelry>& jewelryProducts) {//вывод таблицы товаров
+    headTable();
    int i = 0;
-   for (auto& jewelry : jewelryProducts) {
-       cout << "|" << setw(3) << ++i << "|" << std::setw(16) << jewelry.getProductType() << " | "
-           << std::setw(10) << jewelry.getMetall() << " | "
-       << std::setw(14) << jewelry.getMetallSample() << "|" << setw(5) << jewelry.getPrice() << "|" << setw(5) << jewelry.getAmount() << "|" << setw(12) << jewelry.getCollection() << "|";
-       /*if (medical.quantity_miss_day >= 16) {
-           medical.pay_day = medical.day_salary;
-           cout << setw(9) << medical.day_salary << "|";
-           medical.result_pay = medical.pay_day * medical.quantity_miss_day;
-           cout << setw(5) << medical.result_pay << "|" << std::endl;
+   for (const auto& jewelry : jewelryProducts) {
+       cout<<"| ";
+       cout << left << setw(4) << ++i;
+       cout<<" | ";
+           cout << left << setw(17) << jewelry.getProductType();
+       cout<<" | ";
+           cout << left << setw(20) << jewelry.getMetall();
+       cout<<" | ";
+           cout << left << setw(15) << jewelry.getMetallSample();
+       cout<<" | ";
+           cout << left << setw(10) << jewelry.getPrice();
+       cout<<" | ";
+           cout << left << setw(13) << jewelry.getAmount();
+       cout<<" | ";
+           cout << left << setw(13) << jewelry.getBrand();
+       cout<<" |"<<endl;
+        
+       cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
-       else {
-           medical.pay_day = medical.day_salary * 0.8;
-           cout << setw(9) << medical.day_salary * 0.8 << "|";
-           medical.result_pay = medical.pay_day * medical.quantity_miss_day;
-           cout << setw(5) << medical.result_pay << "|" << std::endl;
-       }*/
-       cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
-
    }
-}
+
+
 void headTable() {//шапка таблицы товаров
-   system("cls");
-   cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
-   cout << "|" << std::setw(16) << "Вид изделия" << " | "
-       << std::setw(10) << "Металл" << " | "
-       << std::setw(14) << "Проба" << "|" << setw(5) << "Цена" << "|" << setw(5) << "Количество" << "|" << setw(7) << "Коллекция" << "|" << std::endl;
-   cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+    cout << "----------------------------------------------------------------------------------------------------------------" << endl;
+         
+    cout<<"| ";
+    cout << left << setw(6) << "№";
+    cout<<" | ";
+        cout << left << setw(20) << "Вид изделия";
+    cout<<" | ";
+        cout << left << setw(20) << "Металл";
+    cout<<" | ";
+        cout << left << setw(27) << "Проба металла ";
+    cout<<" | ";
+        cout << left << setw(14) << "Цена";
+    cout<<" | ";
+        cout << left << setw(23) << "Количество";
+    cout<<" | ";
+        cout << left << setw(22) << "Коллекция";
+    cout<<" |"<<endl;
+        cout << "----------------------------------------------------------------------------------------------------------------" << endl;
 }
 
-void approve() {//одобрение заявки //тут есть вопросы по get или set
-   system("cls");
+void approve() {//одобрение заявки
+ 
    vector<User> accounts = readAccountsFromFile();
    vector<User> users = readUsersFromFile();
    cout << "---Заявки на регистрацию---" << endl;
@@ -401,9 +359,9 @@ void approve() {//одобрение заявки //тут есть вопрос
  
 
 void addJewelry() {//добавить товар
-   system("cls");
+
    cout << "Добавить товар:" << endl;
-   string productType, metall, collection;
+   string productType, metall, brand;
    int price, amount, metallSample;
 
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
@@ -418,8 +376,8 @@ void addJewelry() {//добавить товар
        price = inputNumber(1, 10000);
        cout << "Введите количество данного товара в наличии:" << endl;
        amount = inputNumber(1, 100);
-       cout << "Введите коллекцию, к которой принадлежит товар:" << endl;
-       collection = checkString(collection);
+       cout << "Введите бренд товара:" << endl;
+       brand = checkString(brand);
        break;
    }
    Jewelry jewelry;
@@ -428,14 +386,14 @@ void addJewelry() {//добавить товар
    jewelry.setMetallSample(metallSample);
    jewelry.setPrice(price);
    jewelry.setAmount(amount);
-   jewelry.setCollection(collection);
+   jewelry.setBrand(brand);
    jewelryProducts.push_back(jewelry);
    writeJewelryToFile(jewelryProducts);
    printJewelryTable(jewelryProducts);
 }
 
 void addaccount() {//Добавить аккаунт
-   system("cls");
+  
    cout << "Добавить аккаунт" << endl;
    string login, password;
    bool isAdmin;
@@ -445,7 +403,7 @@ void addaccount() {//Добавить аккаунт
        cin >> login;
        cout << "Введите пароль" << endl;
        cin >> password;
-       cout << "Является ли админом (0,1)" << endl;
+       cout << "Является ли админом (1/0)" << endl;
        isAdmin = inputNumber(0,1);
        if (checkLoginAndPasswordRegist(users, login, password, isAdmin)) {
            break;
@@ -461,8 +419,7 @@ void addaccount() {//Добавить аккаунт
    writeUsersToFile(users);
 }
 
-void deleteJewelry() {//удалить товар //???????
-   system("cls");
+void deleteJewelry() {//удалить товар
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    printJewelryTable(jewelryProducts);
    int number_for_delete;
@@ -483,7 +440,6 @@ void deleteJewelry() {//удалить товар //???????
 }
 
 void deleteAccount() {//удалить аккаунт
-   system("cls");
    vector<User> users = readUsersFromFile();
    printUsersTable(users);
    int number_for_delete;
@@ -521,13 +477,14 @@ void deleteAccount() {//удалить аккаунт
 
 }
 
-void editJewelry() {//редактирование товара
-   while (1) {
-       system("cls");
+void editJewelry() { //редактирование товара
+   int choice;
+    
+   do {
        vector<Jewelry> jewelryProducts = readJewelryFromFile();
        printJewelryTable(jewelryProducts);
-       string productType, metall, collection;
-       int price, amount, metallSample, number_for_edit;
+       string productType, metall, brand;
+       int newPrice, newAmount, number_for_edit;
        cout << "Введите номер товара, который хотите изменить " << endl;
        number_for_edit = inputNumber(1, jewelryProducts.size());
        cout << "--------------Нажмите--------------" << endl;
@@ -537,7 +494,7 @@ void editJewelry() {//редактирование товара
        cout << "4-Чтобы изменить цену товара" << endl;
        cout << "5-Чтобы выйти из режима редактирования" << endl;
        cout << "Ваш выбор: ";
-       int choice;
+        
        choice = inputNumber(1, 5);
        switch (choice) {
        case 1: {
@@ -550,9 +507,9 @@ void editJewelry() {//редактирование товара
            break;
        }
        case 2: {
-           cout << "--Изменеие количества товара в наличии--" << endl;
+           cout << "--Изменение количества товара в наличии--" << endl;
            cout << setw(5) << "Новое количество: " << endl;
-           int newAmount = inputNumber(1, 100);
+           newAmount = inputNumber(1, 100);
            jewelryProducts.at(number_for_edit - 1).setAmount(newAmount);
            writeJewelryToFile(jewelryProducts);
            cout << "--Количество товара изменено--" << endl;
@@ -561,52 +518,51 @@ void editJewelry() {//редактирование товара
        case 3: {
            cout << "--Изменение коллекции--" << endl;
            cout << setw(5) << "Новая коллекция:" << endl;
-           string newCollection = checkString(collection);
-           jewelryProducts.at(number_for_edit - 1).setCollection(newCollection);
+           string newBrand = checkString(brand);
+           jewelryProducts.at(number_for_edit - 1).setBrand(newBrand);
            writeJewelryToFile(jewelryProducts);
            cout << "--Коллекция изменен--" << endl;
            break;
        }
        case 4: {
            cout << "--Изменение цены товара--" << endl;
-           int newPrice = inputNumber(1, 10000);
+           newPrice = inputNumber(1, 10000);
            jewelryProducts.at(number_for_edit - 1).setPrice(newPrice);
            writeJewelryToFile(jewelryProducts);
            cout << "--Цена товара изменена--" << endl;
            break;
        }
        case 5: {
-           return;
+           break;
        }
 
        }
 
-   }
+   }while(choice!=5);
 }
 
 void editAccount() {//редактирование аккаунтов
-    while (1) {
-        system("cls");
+    int choice;
+    do{
         vector<User> users = readUsersFromFile();
         printUsersTable(users);
         int i = 0;    
-        int choice, number_for_edit;
+        int number_for_edit;
         string newLogin;
         cout << "Введите номер аккаунта, который хотите изменить: " << endl;
         number_for_edit = inputNumber(1, users.size());
         cout << "--------------Введите--------------" << endl;
         cout << "1 - Чтобы изменить логин" << endl;
-        cout << "2 - Чтобы изменить пароль¸" << endl;
+        cout << "2 - Чтобы изменить роль пользователя" << endl;
         cout << "3 - Чтобы редактировать все данные аккаунта" << endl;
         cout << "4 - Чтобы выйти из режима редактирования" << endl;
         cout << "Ваш выбор: ";
         choice = inputNumber(1, 4);
-        switch (choice) { //логин поменян, пароль и остальное еще надо менять
+        switch (choice) {
             case 1: {
                 cout << "--Новый логин--" << endl;
                 cin >> newLogin;
-                
-                
+
                 bool isLoginTaken = false;
                 for (int i = 0; i < users.size(); ++i) {
                     if (users.at(i).getLogin() == newLogin) {
@@ -614,86 +570,60 @@ void editAccount() {//редактирование аккаунтов
                         break;
                     }
                 }
-                
+
                 if (!isLoginTaken) {
                     users.at(number_for_edit - 1).setLogin(newLogin);
                     writeUsersToFile(users);
                     cout << "--Логин успешно заменен--" << endl;
-                    break;
                 } else {
                     cout << "Данный логин занят, повторите попытку" << endl;
+                    break;
                 }
                 break;
             }
             case 2: {
-                cout << "--Новый пароль--" << endl;
-                bool userFound = false;
-                int i = 0;
-                while (i < users.size() && !userFound) {
-                    if (users.at(i).getLogin() == global_login) {
-                        cout << "Изменить пароль невозможно" << endl;
-                        userFound = true;
-                    }
-                    i++;
-                }
-
-                if (!userFound) {
-                    cout << "0 - роль администратора" << endl;
-                    cout << "1 - роль пользователя" << endl;
-                    users.at(number_for_edit - 1).setIsAdmin(inputNumber(0, 1));
-                    writeUsersToFile(users);
-                    cout << "---Успешно отредактировано---" << endl;
-                }
-                 break;
+                cout << "--Новая роль пользователя--" << endl;
+                cout << "1 - роль администратора" << endl;
+                cout << "0 - роль пользователя" << endl;
+                users.at(number_for_edit - 1).setIsAdmin(inputNumber(0, 1));
+                writeUsersToFile(users);
+                cout << "---Успешно отредактировано---" << endl;
+                break;
                  }
-                 case 3: {
-                   cout << "--Новый логин--" << endl;
-                   cin >> newLogin;
-                   while (i < users.size()) {
-                    if (users.at(i).getLogin() == newLogin) {
-                     cout << "Данный логин занят, повторите попытку" << endl;
-                     cin >> newLogin;
-                     i = 0;
-                    }
-                    else i++;
-                    }
+            case 3: {
+                cout << "--Новый логин--" << endl;
+                cin >> newLogin;
+                while (i < users.size()) {
+                if (users.at(i).getLogin() == newLogin) {
+                  cout << "Данный логин занят, повторите попытку" << endl;
+                  cin >> newLogin;
+                  i = 0;
+                }
+                else i++;
+                }
                  users.at(number_for_edit - 1).setLogin(newLogin);
-                 cout << "--Новый пароль--" << endl;
-                     bool userFound = false;
-                     int i = 0;
-                     while (i < users.size() && !userFound) {
-                         if (users.at(i).getLogin() == global_login) {
-                             cout << "Изменить пароль невозможно" << endl;
-                             userFound = true;
-                         }
-                         i++;
-                     }
-
-                     if (!userFound) {
-                         cout << "0 - роль администратора" << endl;
-                         cout << "1 - роль пользователя" << endl;
-                         users.at(number_for_edit - 1).setIsAdmin(inputNumber(0, 1));
-                         writeUsersToFile(users);
-                         cout << "---Успешно отредактировано---" << endl;
-                     }
+                     cout << "--Новая роль пользователя--" << endl;
+                     cout << "1 - роль администратора" << endl;
+                     cout << "0 - роль пользователя" << endl;
+                     users.at(number_for_edit - 1).setIsAdmin(inputNumber(0, 1));
+                     writeUsersToFile(users);
+                     cout << "---Успешно отредактировано---" << endl;
                  break;
-                 
                  }
-                 case 4: {
-                 return;
-                 }
-                 }
-                
+            case 4:{
+                break;
             }
-        }
+            }
+                
+    }while(choice!=4);
+}
     
        
 
-void menuWorkWithUser() {//меню для работы с учетными записями
-   while (1) {
-       // system("cls");
+void menuWorkWithUser() { //меню для работы с учетными записями
+   int choice;
+   do {
        cout << "--------------Введите--------------" << endl;
-       int choice;
        vector<User> users = readUsersFromFile();
        cout << "1 - для вывода учетных записей" << endl;
        cout << "2 - чтобы добавить учетную запись" << endl;
@@ -724,56 +654,78 @@ void menuWorkWithUser() {//меню для работы с учетными за
            approve();
        }
        case 6: {
-           return;
+           break;
        }
+       default:cout<<"Введено некорректное значение. Попробуйте снова.";
        }
-   }
+   }while(choice!=6);
 }
 
 void individualTask() {
-    cout <<"Uraaa"<<endl;//индивидуальное задание
-   /*system("cls");
-   vector<Medical> medicals = readMedicalFromFile();
-   int month, year; double payment = 0;
-   cout << "Введите номер месяца: ";
-   month = inputNumber(1, 12);
-   cout << "Введите год: ";
-   year = inputNumber(1970, 2023);
-   int count = 0;
-   cout << "---Выплаты по больничным листам---" << " за " << month << "." << year << endl;
-   headTable();
-   for (int i = 0; i < medicals.size(); i++) {
-       if (medicals.at(i).Data.month == month && medicals.at(i).Data.year == year) {
-           count++;
-           cout << "|" << setw(3) << i + 1 << "|" << std::setw(16) << medicals.at(i).Fio.surname << " | "
-               << std::setw(10) << medicals.at(i).Fio.name << " | "
-               << std::setw(14) << medicals.at(i).Fio.patronymic << "|" << setw(5) << medicals.at(i).Data.day << "|" << setw(5) << medicals.at(i).Data.month << "|" << setw(7) << medicals.at(i).Data.year << "|"
-               << setw(12) << medicals.at(i).day_salary << "|" << setw(15) << medicals.at(i).quantity_miss_day << "|";
-           if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
-           payment += medicals.at(i).result_pay;
-       }
-   }
-   if (count > 0) {
-       cout << "Общая сумма выплат за" << month << "месяц " << year << "год составила " << payment << endl;
-   }
-   else { cout << "Выплаты не производились" << endl; }*/
+    vector<Jewelry> jewelryProducts = readJewelryFromFile();
+    cout << "--Заказ товара--" << endl;
+    cout << "Введите номер товара, который хотите заказать: "<<endl;
+    printJewelryTable(jewelryProducts);
+    int choice;
+    int choice2;
+    int choice3;
+    choice=inputNumber(1, jewelryProducts.size())-1;
+    if(jewelryProducts[choice].getAmount()>0)
+    {
+        
+            cout<<"Вы уверены, что хотите заказать этот товар?"<<endl;
+            cout<<"1. Да"<<endl;
+            cout<<"2. Нет"<<endl;
+            cout<<"Ваш выбор?"<<endl;
+            cin >> choice2;
+            switch(choice2)
+            {
+                case 1:
+                {
+                    cout<<"Заказ товара подтвержден."<<endl;
+                    jewelryProducts[choice].setAmount(jewelryProducts[choice].getAmount() - 1);
+                    break;
+                }
+                case 2:
+                {
+                    cout<<"Вы отменили заказ товара."<<endl;
+                    return;
+                }
+                default:cout<<"Неверный выбор. Попробуйте снова.";
+            }
+         
+        
+    }
+    else if(jewelryProducts[choice].getAmount()==0)
+    {
+        
+            cout<<"Выбранного вами товара на данный момент нет в наличии. Желаете оформить предзаказ?"<<endl;
+            cout<<"1. Да"<<endl;
+            cout<<"2. Нет"<<endl;
+            cout<<"Ваш выбор?"<<endl;
+            cin >> choice3;
+            switch(choice3)
+            {
+                case 1:
+                {
+                    cout<<"Предзаказ оформлен. Вы получите свой товар, как только он появится в наличии."<<endl;
+                    break;
+                }
+                case 2:
+                {
+                    cout<<"Вы отменили предзаказ товара."<<endl;
+                    return;
+                }
+                default: cout<<"Неверный выбор. Попробуйте снова";
+            }
+        
+    }
+    
+    writeJewelryToFile(jewelryProducts);
 }
 
 
 void searchProductType() {//поиск по виду изделия
-   system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    string productType;
    int count = 0;
@@ -785,24 +737,23 @@ void searchProductType() {//поиск по виду изделия
    for (int i = 0; i < jewelryProducts.size(); i++) {
        if (jewelryProducts.at(i).getProductType() == productType) {
            count++;
-           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).getProductType() << " | "
-               << std::setw(10) << jewelryProducts.at(i).getMetall() << " | "
-               << std::setw(14) << jewelryProducts.at(i).getMetallSample() << "|" << setw(5) << jewelryProducts.at(i).getPrice() << "|"
-               << setw(5) << jewelryProducts.at(i).getAmount() << "|" << setw(7) << jewelryProducts.at(i).getCollection() << "|";
-               
-           /*if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }*/
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+           cout<<"|";
+           cout << left << setw(3) << ++a;
+           cout<<" | ";
+               cout << left << setw(17) << jewelryProducts.at(i).getProductType();
+           cout<<" | ";
+               cout << left << setw(20) << jewelryProducts.at(i).getMetall();
+           cout<<" | ";
+               cout << left << setw(15) << jewelryProducts.at(i).getMetallSample();
+           cout<<" | ";
+               cout << left << setw(10) << jewelryProducts.at(i).getPrice();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getAmount();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getBrand();
+           cout<<" |"<<endl;
+            
+           cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
    }
    if (count == 0) {
@@ -812,7 +763,6 @@ void searchProductType() {//поиск по виду изделия
 }
 
 void searchMetall() {// поиск по виду металла
-   system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    string metall;
    int count = 0;
@@ -824,24 +774,23 @@ void searchMetall() {// поиск по виду металла
    for (int i = 0; i < jewelryProducts.size(); i++) {
        if (jewelryProducts.at(i).getMetall() == metall) {
            count++;
-           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).getProductType() << " | "
-               << std::setw(10) << jewelryProducts.at(i).getMetall() << " | "
-               << std::setw(14) << jewelryProducts.at(i).getMetallSample() << "|" << setw(5) << jewelryProducts.at(i).getPrice() << "|"
-               << setw(5) << jewelryProducts.at(i).getAmount() << "|" << setw(7) << jewelryProducts.at(i).getCollection() << "|";
-               
-           /*if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }*/
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+           cout<<"|";
+           cout << left << setw(3) << ++a;
+           cout<<" | ";
+               cout << left << setw(17) << jewelryProducts.at(i).getProductType();
+           cout<<" | ";
+               cout << left << setw(20) << jewelryProducts.at(i).getMetall();
+           cout<<" | ";
+               cout << left << setw(15) << jewelryProducts.at(i).getMetallSample();
+           cout<<" | ";
+               cout << left << setw(10) << jewelryProducts.at(i).getPrice();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getAmount();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getBrand();
+           cout<<" |"<<endl;
+            
+           cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
    }
    if (count == 0) {
@@ -851,7 +800,6 @@ void searchMetall() {// поиск по виду металла
 }
 
 void searchPrice() {//поиск по цене
-   system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    int price;
    int count = 0;
@@ -859,27 +807,28 @@ void searchPrice() {//поиск по цене
    cout << "--Поиск по цене--" << endl;
    cout << "Введите цену: ";
    price = inputNumber(0, 10000);
-   headTable();
+    
    for (int i = 0; i < jewelryProducts.size(); i++) {
        if (jewelryProducts.at(i).getPrice() == price) {
            count++;
-           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).getProductType() << " | "
-               << std::setw(10) << jewelryProducts.at(i).getMetall() << " | "
-               << std::setw(14) << jewelryProducts.at(i).getMetallSample() << "|" << setw(5) << jewelryProducts.at(i).getPrice() << "|"
-               << setw(5) << jewelryProducts.at(i).getAmount() << "|" << setw(7) << jewelryProducts.at(i).getCollection() << "|";
-           /*if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }*/
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+           headTable();
+           cout<<"|";
+           cout << left << setw(3) << ++a;
+           cout<<" | ";
+               cout << left << setw(17) << jewelryProducts.at(i).getProductType();
+           cout<<" | ";
+               cout << left << setw(20) << jewelryProducts.at(i).getMetall();
+           cout<<" | ";
+               cout << left << setw(15) << jewelryProducts.at(i).getMetallSample();
+           cout<<" | ";
+               cout << left << setw(10) << jewelryProducts.at(i).getPrice();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getAmount();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getBrand();
+           cout<<" |"<<endl;
+            
+           cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
    }
    if (count == 0) {
@@ -889,7 +838,6 @@ void searchPrice() {//поиск по цене
 
 }
 void searchAmount() {//поиск по количеству
-   system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    int amount;
    int count = 0;
@@ -897,27 +845,27 @@ void searchAmount() {//поиск по количеству
    cout << "--Поиск по количеству товара в наличии--" << endl;
    cout << "Введите количество товара в наличии: ";
    amount = inputNumber(0, 100);
-   headTable();
    for (int i = 0; i < jewelryProducts.size(); i++) {
        if (jewelryProducts.at(i).getAmount() == amount) {
            count++;
-           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).getProductType() << " | "
-               << std::setw(10) << jewelryProducts.at(i).getMetall() << " | "
-               << std::setw(14) << jewelryProducts.at(i).getMetallSample() << "|" << setw(5) << jewelryProducts.at(i).getPrice() << "|"
-               << setw(5) << jewelryProducts.at(i).getAmount() << "|" << setw(7) << jewelryProducts.at(i).getCollection() << "|";
-           /*if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }*/
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+           headTable();
+           cout<<"|";
+           cout << left << setw(3) << ++a;
+           cout<<" | ";
+               cout << left << setw(17) << jewelryProducts.at(i).getProductType();
+           cout<<" | ";
+               cout << left << setw(20) << jewelryProducts.at(i).getMetall();
+           cout<<" | ";
+               cout << left << setw(15) << jewelryProducts.at(i).getMetallSample();
+           cout<<" | ";
+               cout << left << setw(10) << jewelryProducts.at(i).getPrice();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getAmount();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getBrand();
+           cout<<" |"<<endl;
+            
+           cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
    }
    if (count == 0) {
@@ -927,7 +875,6 @@ void searchAmount() {//поиск по количеству
 
 }
 void searcMetallSample() {//поиск по пробе металла
-system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    int metallSample;
    int count = 0;
@@ -935,27 +882,27 @@ system("cls");
    cout << "--Поиск по пробе металла--" << endl;
    cout << "Введите пробу металла: ";
    metallSample = inputNumber(375, 950);
-   headTable();
    for (int i = 0; i < jewelryProducts.size(); i++) {
        if (jewelryProducts.at(i).getMetallSample() == metallSample) {
            count++;
-           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).getProductType() << " | "
-               << std::setw(10) << jewelryProducts.at(i).getMetall() << " | "
-               << std::setw(14) << jewelryProducts.at(i).getMetallSample() << "|" << setw(5) << jewelryProducts.at(i).getPrice() << "|"
-               << setw(5) << jewelryProducts.at(i).getAmount() << "|" << setw(7) << jewelryProducts.at(i).getCollection() << "|";
-           /*if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }*/
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+           headTable();
+           cout<<"|";
+           cout << left << setw(3) << ++a;
+           cout<<" | ";
+               cout << left << setw(17) << jewelryProducts.at(i).getProductType();
+           cout<<" | ";
+               cout << left << setw(20) << jewelryProducts.at(i).getMetall();
+           cout<<" | ";
+               cout << left << setw(15) << jewelryProducts.at(i).getMetallSample();
+           cout<<" | ";
+               cout << left << setw(10) << jewelryProducts.at(i).getPrice();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getAmount();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getBrand();
+           cout<<" |"<<endl;
+            
+           cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
    }
    if (count == 0) {
@@ -965,36 +912,34 @@ system("cls");
 }
 
 void searchCollection() {// поиск по коллекции
-   system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
-   string collection;
+   string brand;
    int count = 0;
    int a = 0;
    cout << "--Поиск по виду металла--" << endl;
    cout << "Введите вид металла: ";
-   collection = checkString(collection);
-   headTable();
+   brand = checkString(brand);
    for (int i = 0; i < jewelryProducts.size(); i++) {
-       if (jewelryProducts.at(i).getCollection() == collection) {
+       if (jewelryProducts.at(i).getBrand() == brand) {
            count++;
-           cout << "|" << setw(3) << ++a << "|" << std::setw(16) << jewelryProducts.at(i).getProductType() << " | "
-               << std::setw(10) << jewelryProducts.at(i).getMetall() << " | "
-               << std::setw(14) << jewelryProducts.at(i).getMetallSample() << "|" << setw(5) << jewelryProducts.at(i).getPrice() << "|"
-               << setw(5) << jewelryProducts.at(i).getAmount() << "|" << setw(7) << jewelryProducts.at(i).getCollection() << "|";
-               
-           /*if (medicals.at(i).quantity_miss_day >= 16) {
-               cout << setw(9) << medicals.at(i).day_salary << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }
-           else {
-               cout << setw(9) << medicals.at(i).day_salary * 0.8 << "|";
-               medicals.at(i).pay_day = medicals.at(i).day_salary * 0.8;
-               medicals.at(i).result_pay = medicals.at(i).pay_day * medicals.at(i).quantity_miss_day;
-               cout << setw(5) << medicals.at(i).result_pay << "|" << std::endl;
-           }*/
-           cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+           headTable();
+           cout<<"|";
+           cout << left << setw(3) << ++a;
+           cout<<" | ";
+               cout << left << setw(17) << jewelryProducts.at(i).getProductType();
+           cout<<" | ";
+               cout << left << setw(20) << jewelryProducts.at(i).getMetall();
+           cout<<" | ";
+               cout << left << setw(15) << jewelryProducts.at(i).getMetallSample();
+           cout<<" | ";
+               cout << left << setw(10) << jewelryProducts.at(i).getPrice();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getAmount();
+           cout<<" | ";
+               cout << left << setw(13) << jewelryProducts.at(i).getBrand();
+           cout<<" |"<<endl;
+            
+           cout << "----------------------------------------------------------------------------------------------------------------" << endl;
        }
    }
    if (count == 0) {
@@ -1004,7 +949,6 @@ void searchCollection() {// поиск по коллекции
 }
 
 void searchJewelry() {//поиск товаров
-   system("cls");
    cout << "--------------Введите--------------" << endl;
    int choice;
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
@@ -1047,7 +991,6 @@ void searchJewelry() {//поиск товаров
 }
 
 void menuSort() {//меню сортировки
-   system("cls");
    vector<Jewelry> jewelryProducts = readJewelryFromFile();
    vector<Jewelry> jewelry_temp;
    jewelry_temp = jewelryProducts;
@@ -1100,10 +1043,8 @@ bool isSortByMetall(Jewelry metall_a, Jewelry metall_b){//сортировка �
 
 
 
-
 void menuWorkWithJewelry() {//меню для работы с товарами
    while (1) {
-       // system("cls");
        cout << "--------------Введите--------------" << endl;
        int choice;
        vector<Jewelry> jewelryProducts = readJewelryFromFile();
@@ -1111,10 +1052,9 @@ void menuWorkWithJewelry() {//меню для работы с товарами
        cout << "2 - для добавления товара" << endl;
        cout << "3 - для редактирования товара" << endl;
        cout << "4 - для удаления товара" << endl;
-       cout << "5 - для оформления заказа или предзаказа" << endl;
-       cout << "6 - для поиска товара" << endl;
-       cout << "7 - для сортировки товаров" << endl;
-       cout << "8 - для выхода" << endl;
+       cout << "5 - для поиска товара" << endl;
+       cout << "6 - для сортировки товаров" << endl;
+       cout << "7 - для выхода" << endl;
        cout << "Ваш выбор:  ";
        choice = inputNumber(1, 8);
        switch (choice) {
@@ -1135,18 +1075,14 @@ void menuWorkWithJewelry() {//меню для работы с товарами
            break;
        }
        case 5: {
-           individualTask();
-           break;
-       }
-       case 6: {
            searchJewelry();
            break;
        }
-       case 7: {
+       case 6: {
            menuSort();
            break;
        }
-       case 8: {
+       case 7: {
            return;
        }
        }
@@ -1155,10 +1091,10 @@ void menuWorkWithJewelry() {//меню для работы с товарами
 
 void menuUser() {//меню пользователя
    while (1) {
-       cout << "Добро пожаловать в меню пользователя" << endl;
-       cout << "--------------Введите--------------" << endl;
        int choice;
        vector<Jewelry> jewelryProducts = readJewelryFromFile();
+       cout << "--------------МЕНЮ ПОЛЬЗОВАТЕЛЯ--------------" << endl;
+       cout << "Введите:" << endl;
        cout << "1 - для просмотра данных" << endl;
        cout << "2 - для поиска данных" << endl;
        cout << "3 - для сортировки данных" << endl;
@@ -1193,10 +1129,9 @@ void menuUser() {//меню пользователя
 
 void menuAdministrator() {//меню администратора
    while (1) {
-       system("cls");
-       cout << "Добро пожаловать в меню администратора" << endl;
-       cout << "--------------Введите--------------" << endl;
        int choice;
+       cout << "--------------МЕНЮ АДМИНИСТРАТОРА--------------" << endl;
+       cout << "Введите:" << endl;
        cout << "1 - для работы с учетными записями" << endl;
        cout << "2 - для работы с данными" << endl;
        cout << "3 - для выхода" << endl;
@@ -1204,12 +1139,10 @@ void menuAdministrator() {//меню администратора
        choice = inputNumber(1, 3);
        switch (choice) {
        case 1: {
-           system("cls");
            menuWorkWithUser();
            break;
        }
        case 2: {
-           system("cls");
            menuWorkWithJewelry();
            break;
        }
@@ -1229,7 +1162,6 @@ bool checkLoginAndPassword(std::vector<User>& users, std::string login, std::str
            return true;
        }
    }
-   std::cout << "Неверный логин или пароль!" << std::endl;
    return false;
 }
 
@@ -1239,86 +1171,70 @@ bool checkLoginAndPasswordRegist(std::vector<User>& users, std::string login, st
            std::cout << "Такой пользователь уже существует" << endl;
            return false;
        }
+       if (user.getLogin() == login) {
+           std::cout << "Пользователь с таким логином уже существует" << endl;
+           return false;
+       }
    }
    return true;
 }
 
+ 
+
 void authorization() {//авторизация
        
-   cout << "Авторизация:" << std::endl;
-   string login, password;
-   vector<User> accounts = readAccountsFromFile(); // Ваша функция для чтения пользователей из файла
-   bool isLoggedIn = false;
+    cout << "Авторизация:" << std::endl;
+       string login, password;
+       vector<User> accounts = readAccountsFromFile(); // Ваша функция для чтения пользователей из файла
+       bool isLoggedIn = false;
 
-   while (!isLoggedIn) {
-       cout << "Введите логин:  ";
-       cin >> login;
-               
-       cout << "Введите пароль: ";
-       cin >> password;
+       while (!isLoggedIn) {
+           cout << "Введите логин:  ";
+           cin >> login;
+                   
+           cout << "Введите пароль: ";
+           cin >> password;
 
-       if (checkLoginAndPassword(accounts, login, password))
-       {
-           std::cout << "Вы вошли в систему." << std::endl;
-           isLoggedIn = true;
-           }
-       else
-       {
-           std::cout << "Неверный логин или пароль. Попробуйте снова." << std::endl;
-       }
-   }
-       /* while ((ch = std::cin.get()) != '\r') {   // \r - символ Enter //там где cin get это я поменяла, может не работать
-           if (ch == '\b') {   // \b - символ "backspace"
-               if (i > 0) {
-                   cout << "\b \b";   // Отображаем backspace, пробел и еще один backspace
-                   i--;
-                   password.erase(i, 1);
+           if (checkLoginAndPassword(accounts, login, password))
+           {
+               isLoggedIn = true;
                }
+           else
+           {
+               std::cout << "Неверный логин или пароль. Попробуйте снова." << std::endl;
            }
-           else {
-               password.insert(i, 1, ch);
-               i++;
-               cout << '*';
-           }
-       }*/
-       /*cout << endl;
-       if (checkLoginAndPassword(accounts, login, password)) {
-           break;
-       }*/
+       }
 
 }
 
 
 void registration() {//регистрация
-   //system("cls");
-   cout << "Регистрация:" << endl;
-   string login, password;
-   bool isAdmin;
-   vector<User> accounts = readAccountsFromFile();
-   vector<User> users = readUsersFromFile();
-   while (true) {
-       cout << "Введите логин" << endl;
-       login = checkSize(login);
-       cout << "Введите пароль" << endl;
-       password = checkSize(password);
-       cout << "Является ли админом (1/0)" << endl;
-       isAdmin = inputNumber(0, 1);
-       if (checkLoginAndPasswordRegist(accounts, login, password, isAdmin)&& checkLoginAndPasswordRegist(users, login, password, isAdmin)) {
-           break;
+    cout << "Регистрация:" << endl;
+       string login, password;
+       bool isAdmin;
+       vector<User> accounts = readAccountsFromFile();
+       vector<User> users = readUsersFromFile();
+       while (true) {
+           cout << "Введите логин" << endl;
+           login = checkSize(login);
+           cout << "Введите пароль" << endl;
+           password = checkSize(password);
+           cout << "Является ли админом (1/0)" << endl;
+           isAdmin = inputNumber(0, 1);
+           if (checkLoginAndPasswordRegist(accounts, login, password, isAdmin)&& checkLoginAndPasswordRegist(users, login, password, isAdmin)) {
+               break;
+           }
+         
+           
        }
-     
-       
-   }
-  
-       User account;
-       account.setLogin(login);
-       account.setPassword(password);
-       account.setIsAdmin(isAdmin);
-       accounts.push_back(account);
-       writeAccountsToFile(accounts);
-       cout << "Ваша заявка на регистрацию отправлена, ожидайте ответ администратора" << endl;
-   
-
+      
+           User account;
+           account.setLogin(login);
+           account.setPassword(password);
+           account.setIsAdmin(isAdmin);
+           accounts.push_back(account);
+           writeAccountsToFile(accounts);
+           cout << "Ваша заявка на регистрацию отправлена, ожидайте ответ администратора" << endl;
 }
 
 
