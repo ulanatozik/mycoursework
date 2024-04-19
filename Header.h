@@ -60,6 +60,7 @@ public:
      }
 };
 
+
 class Jewelry
 {
 private: 
@@ -67,14 +68,22 @@ private:
     string metall;
     int metallSample;
     int price;
+    int orderNumber;
     int amount;
     string brand;
+    int totalRevenue;
+    int totalSoldQuantity;
 public:
     
     Jewelry(){}
     
-    Jewelry(const std::string& productType, const std::string& metall, int metallSample, int price, int amount, const std::string& brand)
-        : productType(productType),metall(metall), metallSample(metallSample),   price(price), amount(amount), brand(brand)  {}
+    Jewelry(const std::string& productType, const std::string& metall, int metallSample, int price, int orderNumber, int amount, const std::string& brand )
+        : productType(productType),metall(metall), metallSample(metallSample),   price(price), orderNumber(orderNumber), amount(amount), brand(brand), totalRevenue(0), totalSoldQuantity(0)   {}
+    
+    void sell() {
+            totalSoldQuantity++;
+            totalRevenue += price;
+        }
 
     const std::string& getProductType() const {
         return productType;
@@ -86,6 +95,14 @@ public:
 
     int getPrice() const {
         return price;
+    }
+    
+    int getTotalRevenue() const{
+            return totalRevenue;
+        }
+
+    int getTotalSoldQuantity() const {
+            return totalSoldQuantity;
     }
     
     int getAmount() const {
@@ -112,6 +129,10 @@ public:
         price = newPrice;
     }
     
+    void setOrderNumber(int newOrderNumber){
+        orderNumber = newOrderNumber;
+    }
+    
     void setAmount(int newAmount) {
         amount = newAmount;
     }
@@ -126,6 +147,7 @@ public:
     
 };
  
+
 extern bool isNumberNumeric();//проверка на ввод числа
 extern bool isNumberRangeCorrect(int number, int left_range, int right_range);//проверка на ввод промежутка
 extern string checkString(string s);//проверка на ввод строки
@@ -149,6 +171,7 @@ extern void printJewelryTable(const std::vector<Jewelry>& jewelryProducts);//о�
 extern void addJewelry();//добавление товара
 extern void deleteJewelry();//удаление товара
 extern void editJewelry();//редактирование товара
+extern void printTotalRevenue(const std::vector<Jewelry>& jewelryProducts); //подсчёт общего числа выручки и количества проданных товаров
 extern bool checkLoginAndPassword(std::vector<User>& users, std::string login, std::string password);//проверка на ввод логина и пароля
 extern bool checkLoginAndPasswordRegist(std::vector<User>& users, std::string login, std::string password, bool isAdmin);//проверка на существование аккаунта
 extern void authorization();//авторизация
