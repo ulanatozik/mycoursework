@@ -492,12 +492,12 @@ void editJewelry() { //редактирование товара
        int newPrice, newAmount, number_for_edit;
        cout << "Введите номер товара, который хотите изменить " << endl;
        number_for_edit = inputNumber(1, jewelryProducts.size());
-       cout << "--------------Нажмите--------------" << endl;
-       cout << "1-Чтобы изменить вид изделия" << endl;
-       cout << "2-Чтобы изменить количество товара в наличии" << endl;
-       cout << "3-Чтобы изменить коллекцию, к которой принадлежит товар" << endl;
-       cout << "4-Чтобы изменить цену товара" << endl;
-       cout << "5-Чтобы выйти из режима редактирования" << endl;
+       cout << "--------------Введите--------------" << endl;
+       cout << "1 - Чтобы изменить вид изделия" << endl;
+       cout << "2 - Чтобы изменить количество товара в наличии" << endl;
+       cout << "3 - Чтобы изменить коллекцию, к которой принадлежит товар" << endl;
+       cout << "4 - Чтобы изменить цену товара" << endl;
+       cout << "5 - Чтобы выйти из режима редактирования" << endl;
        cout << "Ваш выбор: ";
         
        choice = inputNumber(1, 5);
@@ -678,7 +678,6 @@ void individualTask() {
     choice=inputNumber(1, jewelryProducts.size())-1;
     if(jewelryProducts[choice].getAmount()>0)
     {
-        
             cout<<"Вы уверены, что хотите заказать этот товар?"<<endl;
             cout<<"1. Да"<<endl;
             cout<<"2. Нет"<<endl;
@@ -702,12 +701,9 @@ void individualTask() {
                 }
                 default:cout<<"Неверный выбор. Попробуйте снова.";
             }
-         
-        
     }
     else if(jewelryProducts[choice].getAmount()==0)
     {
-        
             cout<<"Выбранного вами товара на данный момент нет в наличии. Желаете оформить предзаказ?"<<endl;
             cout<<"1. Да"<<endl;
             cout<<"2. Нет"<<endl;
@@ -729,9 +725,7 @@ void individualTask() {
                 }
                 default: cout<<"Неверный выбор. Попробуйте снова";
             }
-        
     }
-    
     writeJewelryToFile(jewelryProducts);
 }
 
@@ -1082,7 +1076,7 @@ void menuWorkWithJewelry() {//меню для работы с товарами
        cout << "4 - для удаления товара" << endl;
        cout << "5 - для поиска товара" << endl;
        cout << "6 - для сортировки товаров" << endl;
-       cout << "7 - для пизды ебаной" << endl;
+       cout << "7 - для вывода выручки и количества проданных товаров" << endl;
        cout << "8 - для выхода" << endl;
        cout << "Ваш выбор:  ";
        choice = inputNumber(1, 8);
