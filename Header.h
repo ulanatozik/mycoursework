@@ -148,6 +148,7 @@ public:
 };
  
 
+
 extern bool isNumberNumeric();//проверка на ввод числа
 extern bool isNumberRangeCorrect(int number, int left_range, int right_range);//проверка на ввод промежутка
 extern string checkString(string s);//проверка на ввод строки
