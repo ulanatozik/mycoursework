@@ -239,9 +239,6 @@ void writeAccountsToFile(const vector<User>& accounts) {//Запись акка�
    outputFile.close();
 }
 
-
-
-
 void writeJewelryToFile( std::vector<Jewelry>& jewelryProducts) {//запись товаров в файл
    string filename = "/Users/ulanatozik/материалы по учебе/курсач 1 курс /мой курсачик/mycoursework/mycoursework/jewelrypr.txt";
    std::ofstream outputFile(filename);
@@ -383,7 +380,7 @@ void addJewelry() {//добавить товар
        cout << "Введите цену за 1 единицу товара:" << endl;
        price = inputNumber(1, 10000);
        cout << "Введите количество данного товара в наличии:" << endl;
-       amount = inputNumber(1, 100);
+       amount = inputNumber(0, 100);
        cout << "Введите бренд товара:" << endl;
        brand = checkString(brand);
        break;
@@ -677,6 +674,7 @@ void individualTask() {
     int choice;
     int choice2;
     int choice3;
+ 
     choice=inputNumber(1, jewelryProducts.size())-1;
     if(jewelryProducts[choice].getAmount()>0)
     {
@@ -690,8 +688,11 @@ void individualTask() {
             {
                 case 1:
                 {
+                    cout<<"Ожидайте ответа администратора для подтверждения вашего заказа."<<endl;
+                    sleep(3);
                     cout<<"Заказ товара подтвержден."<<endl;
                     jewelryProducts[choice].setAmount(jewelryProducts[choice].getAmount() - 1);
+                    jewelryProducts[choice].sell();
                     break;
                 }
                 case 2:
@@ -716,6 +717,8 @@ void individualTask() {
             {
                 case 1:
                 {
+                    cout<<"Ожидайте ответа администратора для подтверждения вашего предзаказа."<<endl;
+                    sleep(3);
                     cout<<"Предзаказ оформлен. Вы получите свой товар, как только он появится в наличии."<<endl;
                     break;
                 }
@@ -730,6 +733,23 @@ void individualTask() {
     }
     
     writeJewelryToFile(jewelryProducts);
+}
+
+
+void printTotalRevenue(const std::vector<Jewelry>& jewelryProducts) { //подсчёт общего числа выручки и количества проданных товаров
+        int totalSoldQuantity = 0;
+        int totalRevenue = 0;
+        int number=0;
+        for (const auto& jewelry : jewelryProducts) {
+            if (jewelry.getTotalSoldQuantity() > 0) {
+                totalSoldQuantity += jewelry.getTotalSoldQuantity();
+                totalRevenue += jewelry.getPrice() * jewelry.getTotalSoldQuantity();
+                std::cout << "Общее количество проданных товаров для товара " << jewelry.getProductType() << "(номер " << number++ << "): " << jewelry.getTotalSoldQuantity() << std::endl;
+                std::cout << "Общая выручка для товара " << jewelry.getProductType() << ": " << jewelry.getPrice() * jewelry.getTotalSoldQuantity() << std::endl;
+            }
+        }
+        std::cout << "Обшее количество проданных товаров: " << totalSoldQuantity << std::endl;
+        std::cout << "Общая выручка от всех проданных товаров: " << totalRevenue << std::endl;
 }
 
 
@@ -1062,7 +1082,8 @@ void menuWorkWithJewelry() {//меню для работы с товарами
        cout << "4 - для удаления товара" << endl;
        cout << "5 - для поиска товара" << endl;
        cout << "6 - для сортировки товаров" << endl;
-       cout << "7 - для выхода" << endl;
+       cout << "7 - для пизды ебаной" << endl;
+       cout << "8 - для выхода" << endl;
        cout << "Ваш выбор:  ";
        choice = inputNumber(1, 8);
        switch (choice) {
@@ -1091,8 +1112,13 @@ void menuWorkWithJewelry() {//меню для работы с товарами
            break;
        }
        case 7: {
-           return;
+           printTotalRevenue(jewelryProducts);
+           break;
        }
+           case 8:{
+               return;
+           }
+               
        }
    }
 }
