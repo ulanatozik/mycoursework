@@ -20,6 +20,8 @@
 #include <algorithm>
 #include <unistd.h>
 #include <termios.h>
+#include <functional>
+#include <locale.h>
 
 using namespace std;
 
@@ -148,58 +150,90 @@ public:
 };
  
 
+class ProgrammChecks{//класс для хранения функций проверок
+public:
+     bool isNumberNumeric();//проверка на ввод числа
+     bool isNumberRangeCorrect(int number, int left_range, int right_range);//проверка на ввод промежутка
+     string checkSize(string s);//проверка на размер строки
+     string checkString(string s);//проверка на ввод строки
+     int inputNumber(int left_range, int right_range);//проверка на ввод числа в промежутке
+};
 
-extern bool isNumberNumeric();//проверка на ввод числа
-extern bool isNumberRangeCorrect(int number, int left_range, int right_range);//проверка на ввод промежутка
-extern string checkString(string s);//проверка на ввод строки
-extern int inputNumber(int left_range, int right_range);//проверка на ввод числа в промежутке
-extern void start_menu();//стартовое меню
-extern void menuWorkWithUser();//меню работы с аккаунтами
-extern void menuWorkWithJewelry();//меню работы с товарами
-extern void menuSort();//меню сортировок
-extern void menuUser();//меню пользователя
-extern void menuAdministrator();//меню администратора
-extern void writeUsersToFile(const vector<User>& users);//запись информации о пользователях в файл
-extern vector<User> readUsersFromFile();//чтение информации о пользователях из файла
-extern void writeJewelryToFile(const std::vector<Jewelry>& jewelryProducts);//запись информации о ювелирных изделий в файл
-extern vector<Jewelry> readJewelryFromFile();//чтение информации о ювелирных изделиях из файла
-extern void writeAccountsToFile(const vector<User>& accounts);//запись аккаунтов в файл
-extern vector<User> readAccountsFromFile();//чтение аккаунтов из файла
-extern void headTable();//шапка таблицы товаров
-extern void printAccountsTable(const std::vector<User>& accounts); //вывод таблицы аккаунтов
-extern void printUsersTable(const std::vector<User>& users);//вывод таблицы пользователей
-extern void printJewelryTable(const std::vector<Jewelry>& jewelryProducts);//отображение перечня ювелирных изделий
-extern void addJewelry();//добавление товара
-extern void deleteJewelry();//удаление товара
-extern void editJewelry();//редактирование товара
-extern void printTotalRevenue(const std::vector<Jewelry>& jewelryProducts); //подсчёт общего числа выручки и количества проданных товаров
-extern bool checkLoginAndPassword(std::vector<User>& users, std::string login, std::string password);//проверка на ввод логина и пароля
-extern bool checkLoginAndPasswordRegist(std::vector<User>& users, std::string login, std::string password, bool isAdmin);//проверка на существование аккаунта
-extern void authorization();//авторизация
-extern void registration();//регистрация
-extern void addaccount(); //добавление аккаунта
-extern void deleteAccount();//удаление аккаунта
-extern void editAccount();//редактирование аккаунта
-extern void approve(); //одобрение заявки на регистрацию
-extern string encrypt(string input);//зашифровка
-extern string decrypt(string input);//расшифровка
-extern bool isSortByPrice(Jewelry price_a, Jewelry price_b);//сортировка по цене
-extern bool isSortByAmount(Jewelry amount_a, Jewelry amounth_b);//сортировка по количеству товара в наличии
-extern bool isSortByMetallSample(Jewelry sample_a, Jewelry sample_b);//сортировка по пробе металла
-extern bool isSortByMetall(Jewelry metall_a, Jewelry metall_b);//сортировка по виду металла
-extern void searchPrice();//поиск по цене
-extern void searchAmount(); //поиск по количеству товара в наличии
-extern void searchProductType(); //поиск по виду изделия
-extern void searchMetall(); //поиск по виду металла
-extern void searcMetallSample(); //поиск по пробе металла
-extern void searchBrand();//поиск по названию бренда
-extern void individualTask();//индивидуальное задание (оформление заказа или предзаказа)
+class Menu{
+public:
+    void start_menu();//стартовое меню
+    void menuWorkWithUser();//меню работы с аккаунтами
+    void menuWorkWithJewelry();//меню работы с товарами
+    void menuSort();//меню сортировок
+    void menuSearch();//меню поиска
+    void menuUser();//меню пользователя
+    void menuAdministrator();//меню администратора
+};
 
+class WorkWithFiles{//класс для работы с файлами
+public:
+    void writeUsersToFile(const vector<User>& users);//запись информации о пользователях в файл
+    vector<User> readUsersFromFile();//чтение информации о пользователях из файла
+    void writeJewelryToFile(const vector<Jewelry>& jewelryProducts);//запись информации о ювелирных изделий в файл
+    vector<Jewelry> readJewelryFromFile();//чтение информации о ювелирных изделиях из файла
+    void writeAccountsToFile(const vector<User>& accounts);//запись аккаунтов в файл
+    vector<User> readAccountsFromFile();//чтение аккаунтов из файла
+};
+
+class Tables{//класс для хранения функций, которые выводят таблицы
+public:
+    void headTable();//шапка таблицы товаров
+    void printAccountsTable(const std::vector<User>& accounts); //вывод таблицы аккаунтов
+    void printUsersTable(const std::vector<User>& users);//вывод таблицы пользователей
+    void printJewelryTable(const std::vector<Jewelry>& jewelryProducts);//отображение перечня ювелирных изделий
+};
+
+class WorkWithProducts: public Jewelry{
+public:
+    void addJewelry();//добавление товара
+    void deleteJewelry();//удаление товара
+    void editJewelry();//редактирование товара
+    void printTotalRevenue(const std::vector<Jewelry>& jewelryProducts); //подсчёт общего числа выручки и количества проданных товаров
+    void orderProduct();//индивидуальное задание (оформление заказа или предзаказа)
+};
+
+class WorkWithAccounts: public User{
+public:
+    void addaccount(); //добавление аккаунта
+    void deleteAccount();//удаление аккаунта
+    void editAccount();//редактирование аккаунта
+    void approve(); //одобрение заявки на регистрацию
+};
+
+class EnterSystem{
+public:
+    bool checkLoginAndPassword(vector<User>& users, string login, string password);//проверка на ввод логина и пароля
+    bool checkLoginAndPasswordRegist(vector<User>& users, string login, string password, bool isAdmin);//проверка на существование аккаунта
+    void authorization();//авторизация
+    void registration();//регистрация
+    string encrypt(string input);//зашифровка
+    string decrypt(string input);//расшифровка
+};
+
+class SortProducts{
+public:
+    bool isSortByPrice(Jewelry price_a, Jewelry price_b);//сортировка по цене
+    bool isSortByAmount(Jewelry amount_a, Jewelry amounth_b);//сортировка по количеству товара в наличии
+    bool isSortByMetallSample(Jewelry sample_a, Jewelry sample_b);//сортировка по пробе металла
+    bool isSortByMetall(Jewelry metall_a, Jewelry metall_b);//сортировка по виду металла
+};
  
+class SearchProducts{
+public:
+    void searchPrice();//поиск по цене
+    void searchAmount(); //поиск по количеству товара в наличии
+    void searchProductType(); //поиск по виду изделия
+    void searchMetall(); //поиск по виду металла
+    void searcMetallSample(); //поиск по пробе металла
+    void searchBrand();//поиск по названию бренда
+};
  
- 
 
-
-
+/*cout << setw(13) << this->code << "|" << setw(26) << this->name << "|" << setw(20) << this->price << "|" << setw(15) << this->numberOf << "|";*/
 
 #endif /* Header_h */
