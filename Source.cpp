@@ -1,6 +1,6 @@
 //
 //  Source.cpp
-//  mycoursework
+//  coursework  
 //
 //  Created by Ульяна Тозик on 12.04.24.
 //
@@ -8,5 +8,8 @@
 #include "Header.h"
 
 int main() {
-    start_menu();
+    Menu menuObj;
+    setlocale(0, "rus");
+    menuObj.start_menu();
 }
+
